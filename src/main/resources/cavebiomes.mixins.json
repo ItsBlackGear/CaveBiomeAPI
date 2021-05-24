@@ -7,7 +7,8 @@
   "mixins": [
     "ChunkGeneratorMixin",
     "ColumnFuzzedBiomeMagnifierMixin",
-    "OverworldBiomeProviderMixin"
+    "OverworldBiomeProviderMixin",
+    "provider.BOPBiomeProviderMixin"
   ],
   "client": [
   ],

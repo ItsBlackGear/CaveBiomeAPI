@@ -10,11 +10,11 @@ import java.util.List;
 
 //<>
 
-public class CaveBiomeCollector implements IAreaTransformer0 {
-    private static final ForgeRegistry<Biome> BIOME = (ForgeRegistry<Biome>)ForgeRegistries.BIOMES;
+public class CaveMasterLayer implements IAreaTransformer0 {
+    public static final ForgeRegistry<Biome> BIOME = (ForgeRegistry<Biome>)ForgeRegistries.BIOMES;
     private final List<Biome> biomes;
 
-    public CaveBiomeCollector(List<Biome> biomes) {
+    public CaveMasterLayer(List<Biome> biomes) {
         this.biomes = biomes;
     }
 

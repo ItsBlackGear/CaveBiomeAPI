@@ -20,7 +20,7 @@ public class CaveLayer {
     public static Layer generateCaveLayers(long seed, int biomeSize) {
         LongFunction<IExtendedNoiseRandom<LazyArea>> provider = salt -> new LazyAreaLayerContext(25, seed, salt);
 
-        IAreaFactory<LazyArea> biomeFactory = new CaveBiomeCollector(biomes).apply(provider.apply(200L));
+        IAreaFactory<LazyArea> biomeFactory = new CaveMasterLayer(biomes).apply(provider.apply(200L));
 
         for (int size = 0; size < biomeSize; size++) {
             if ((size + 2) % 3 != 0) {

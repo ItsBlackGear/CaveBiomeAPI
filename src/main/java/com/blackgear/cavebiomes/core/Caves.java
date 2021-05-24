@@ -2,7 +2,9 @@ package com.blackgear.cavebiomes.core;
 
 import com.blackgear.cavebiomes.common.events.RemapEvent;
 import com.blackgear.cavebiomes.core.api.CaveBiomeAPI;
+import com.blackgear.cavebiomes.core.api.GlobalBiomeFeatures;
 import com.blackgear.cavebiomes.core.registries.CaveBiomes;
+import com.blackgear.cavebiomes.core.registries.CaveCarvers;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -26,9 +28,10 @@ public class Caves {
         MinecraftForge.EVENT_BUS.register(this);
 
         MinecraftForge.EVENT_BUS.register(new RemapEvent());
+        MinecraftForge.EVENT_BUS.register(new GlobalBiomeFeatures());
 
         CaveBiomes.BIOMES.register(modEventBus);
-
+        CaveCarvers.CARVERS.register(modEventBus);
 
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::clientSetup);
