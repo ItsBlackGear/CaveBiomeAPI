@@ -9,15 +9,21 @@ import net.minecraft.world.gen.layer.Layer;
 import net.minecraft.world.gen.layer.ZoomLayer;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.function.LongFunction;
 
 //<>
 
 public class CaveLayer {
     public static final List<Biome> biomes = new ArrayList<>();
+    public static final Set<Biome> caveBiomeSet = new HashSet<>();
 
     public static Layer generateCaveLayers(long seed, int biomeSize) {
+        caveBiomeSet.clear();
+        caveBiomeSet.addAll(biomes);
+
         LongFunction<IExtendedNoiseRandom<LazyArea>> provider = salt -> new LazyAreaLayerContext(25, seed, salt);
 
         IAreaFactory<LazyArea> biomeFactory = new CaveMasterLayer(biomes).apply(provider.apply(200L));

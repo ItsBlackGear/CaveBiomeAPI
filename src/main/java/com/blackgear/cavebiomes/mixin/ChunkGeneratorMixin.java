@@ -1,6 +1,6 @@
 package com.blackgear.cavebiomes.mixin;
 
-import com.blackgear.cavebiomes.common.util.BiomeCoordinates;
+import com.blackgear.cavebiomes.core.api.CaveLayer;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.ReportedException;
 import net.minecraft.util.SharedSeedRandom;
@@ -12,11 +12,9 @@ import net.minecraft.world.gen.WorldGenRegion;
 import net.minecraft.world.gen.feature.structure.StructureManager;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 //<>
@@ -49,12 +47,7 @@ public class ChunkGeneratorMixin {
 //            throw new ReportedException(crashReport);
 //        }
 //    }
-
-    @Redirect(method = "func_230351_a_", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/biome/provider/BiomeProvider;getNoiseBiome(III)Lnet/minecraft/world/biome/Biome;"))
-    private Biome getSurfaceNoiseBiome(BiomeProvider biomeProvider, int x, int y, int z) {
-        return biomeProvider.getNoiseBiome(x, 64, z);
-    }
-
+    
     @Inject(method = "func_230351_a_", at = @At("RETURN"), cancellable = true)
     private void getCaveNoiseBiome(WorldGenRegion region, StructureManager manager, CallbackInfo ci) {
         int mainChunkX = region.getMainChunkX();
@@ -62,7 +55,9 @@ public class ChunkGeneratorMixin {
         int x = mainChunkX * 16;
         int z = mainChunkZ * 16;
         BlockPos pos = new BlockPos(x, 0, z);
-        Biome biome = this.biomeProvider.getNoiseBiome((x << 2) + 2, 25, (z << 2) + 2);
+        Biome biome = this.biomeProvider.getNoiseBiome((x << 2) + 2, 10, (z << 2) + 2);
+        if(!CaveLayer.caveBiomeSet.contains(biome)) return;
+
         SharedSeedRandom seedRandom = new SharedSeedRandom();
         long seed = seedRandom.setDecorationSeed(region.getSeed(), x, z);
 
