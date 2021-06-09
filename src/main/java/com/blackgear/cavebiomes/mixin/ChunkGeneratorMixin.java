@@ -15,6 +15,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 //<>
@@ -47,7 +48,12 @@ public class ChunkGeneratorMixin {
 //            throw new ReportedException(crashReport);
 //        }
 //    }
-    
+
+    @Redirect(method = "func_230351_a_", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/biome/provider/BiomeProvider;getNoiseBiome(III)Lnet/minecraft/world/biome/Biome;"))
+    private Biome getsSurfaceNoiseBiome(BiomeProvider provider, int x, int y, int z) {
+        return provider.getNoiseBiome(x, 64, z);
+    }
+
     @Inject(method = "func_230351_a_", at = @At("RETURN"), cancellable = true)
     private void getCaveNoiseBiome(WorldGenRegion region, StructureManager manager, CallbackInfo ci) {
         int mainChunkX = region.getMainChunkX();
