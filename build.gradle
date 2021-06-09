@@ -44,7 +44,7 @@ minecraft {
             workingDirectory project.file('run')
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
             property 'forge.logging.console.level', 'debug'
-            property "mixin.env.disableRefMap", "true"
+//            property "mixin.env.disableRefMap", "true"
             arg "-mixin.config=cavebiomes.mixins.json"
 
             mods {
@@ -58,7 +58,7 @@ minecraft {
             workingDirectory project.file('run')
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
             property 'forge.logging.console.level', 'debug'
-            property "mixin.env.disableRefMap", "true"
+//            property "mixin.env.disableRefMap", "true"
             args '--mod', 'caves', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
 
             mods {
@@ -76,7 +76,6 @@ dependencies {
     minecraft 'net.minecraftforge:forge:1.16.5-36.1.16'
 
     implementation fg.deobf("curse.maven:biomes-o-plenty-220318:3300293")
-    implementation fg.deobf("curse.maven:terraforged-363820:3285909")
 
     annotationProcessor 'org.spongepowered:mixin:0.8.2:processor'
 }
