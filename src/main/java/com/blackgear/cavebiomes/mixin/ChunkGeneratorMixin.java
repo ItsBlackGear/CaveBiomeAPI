@@ -1,6 +1,7 @@
 package com.blackgear.cavebiomes.mixin;
 
 import com.blackgear.cavebiomes.common.util.BiomeCoordinates;
+import com.blackgear.cavebiomes.core.api.CaveLayer;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.ReportedException;
 import net.minecraft.util.SharedSeedRandom;
@@ -62,7 +63,9 @@ public class ChunkGeneratorMixin {
         int x = mainChunkX * 16;
         int z = mainChunkZ * 16;
         BlockPos pos = new BlockPos(x, 0, z);
-        Biome biome = this.biomeProvider.getNoiseBiome((x << 2) + 2, 25, (z << 2) + 2);
+        Biome biome = this.biomeProvider.getNoiseBiome((x << 2) + 2, 10, (z << 2) + 2);
+        if(!CaveLayer.caveBiomeSet.contains(biome)) return;
+
         SharedSeedRandom seedRandom = new SharedSeedRandom();
         long seed = seedRandom.setDecorationSeed(region.getSeed(), x, z);
 
