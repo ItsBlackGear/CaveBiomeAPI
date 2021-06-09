@@ -1,6 +1,5 @@
 package com.blackgear.cavebiomes.mixin;
 
-import com.blackgear.cavebiomes.common.util.BiomeCoordinates;
 import com.blackgear.cavebiomes.core.api.CaveLayer;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.ReportedException;
@@ -13,7 +12,6 @@ import net.minecraft.world.gen.WorldGenRegion;
 import net.minecraft.world.gen.feature.structure.StructureManager;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
