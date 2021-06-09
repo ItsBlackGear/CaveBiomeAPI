@@ -23,7 +23,7 @@ public class OverworldBiomeProviderMixin {
 
     @Inject(method = "<init>", at = @At("RETURN"))
     public void initialize(long seed, boolean legacyBiomeInitLayer, boolean largeBiomes, Registry<Biome> biomeRegistry, CallbackInfo ci) {
-        CaveBiomeAPI.initializeCaveBiomes(seed, CaveConfig.caveBiomeSize.get());
+        CaveBiomeAPI.initializeCaveBiomes(biomeRegistry, seed, CaveConfig.caveBiomeSize.get());
     }
 
     /**
