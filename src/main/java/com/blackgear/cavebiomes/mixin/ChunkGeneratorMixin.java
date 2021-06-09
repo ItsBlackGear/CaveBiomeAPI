@@ -1,6 +1,7 @@
 package com.blackgear.cavebiomes.mixin;
 
 import com.blackgear.cavebiomes.core.api.CaveLayer;
+import com.blackgear.cavebiomes.core.utils.FeatureGenerationHelper;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.ReportedException;
 import net.minecraft.util.SharedSeedRandom;
@@ -68,7 +69,7 @@ public class ChunkGeneratorMixin {
         long seed = seedRandom.setDecorationSeed(region.getSeed(), x, z);
 
         try {
-            biome.generateFeatures(manager, (ChunkGenerator)(Object)this, region, seed, seedRandom, pos);
+            FeatureGenerationHelper.generateOnlyFeatures(biome, manager, (ChunkGenerator)(Object)this, region, seed, seedRandom, pos);
         } catch (Exception exception) {
             CrashReport report = CrashReport.makeCrashReport(exception, "Biome decoration");
             report.makeCategory("Generation").addDetail("CenterX", mainChunkX).addDetail("CenterZ", mainChunkZ).addDetail("Seed", seed).addDetail("Biome", biome);
