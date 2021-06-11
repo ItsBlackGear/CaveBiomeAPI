@@ -1,4 +1,4 @@
-package com.blackgear.cavebiomes.mixin;
+package com.blackgear.cavebiomes.mixin.structure;
 
 import com.blackgear.cavebiomes.core.api.CaveLayer;
 import net.minecraft.world.biome.Biome;
@@ -17,7 +17,7 @@ public class WoodlandMansionMixin {
 
     @Redirect(method = "func_230363_a_(Lnet/minecraft/world/gen/ChunkGenerator;Lnet/minecraft/world/biome/provider/BiomeProvider;JLnet/minecraft/util/SharedSeedRandom;IILnet/minecraft/world/biome/Biome;Lnet/minecraft/util/math/ChunkPos;Lnet/minecraft/world/gen/feature/NoFeatureConfig;)Z",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/world/biome/provider/BiomeProvider;getBiomes(IIII)Ljava/util/Set;"))
-    private Set<Biome> getSurfaceNoiseBiome(BiomeProvider biomeProvider, int xIn, int yIn, int zIn, int radius) {
+    private Set<Biome> getSurfaceBiomes(BiomeProvider biomeProvider, int xIn, int yIn, int zIn, int radius) {
         Set<Biome> biomeSet = biomeProvider.getBiomes(xIn, yIn, zIn, radius);
         biomeSet.removeIf(CaveLayer.caveBiomes::contains);
         return biomeSet;

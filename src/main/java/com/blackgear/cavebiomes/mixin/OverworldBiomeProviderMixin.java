@@ -18,12 +18,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(OverworldBiomeProvider.class)
 public class OverworldBiomeProviderMixin {
-    @Shadow @Final private Registry<Biome> lookupRegistry;
     @Shadow @Final private Layer genBiomes;
+    @Shadow @Final private Registry<Biome> lookupRegistry;
 
     @Inject(method = "<init>", at = @At("RETURN"))
     public void initialize(long seed, boolean legacyBiomeInitLayer, boolean largeBiomes, Registry<Biome> biomeRegistry, CallbackInfo ci) {
-        CaveBiomeAPI.initializeCaveBiomes(biomeRegistry, seed, CaveConfig.caveBiomeSize.get());
+        CaveBiomeAPI.initializeCaveBiomes(biomeRegistry, seed, CaveConfig.CAVE_BIOME_SIZE.get());
     }
 
     /**

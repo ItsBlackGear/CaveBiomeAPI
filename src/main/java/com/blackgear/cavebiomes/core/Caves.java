@@ -18,6 +18,9 @@ import org.apache.logging.log4j.Logger;
 
 //<>
 
+/**
+ * We cannot thank enough to TelepathicGrunt who has helped to fix many of the issues on this project! ;w;
+ */
 @Mod(value = Caves.MODID)
 public class Caves {
     public static final String MODID = "cavebiomes";

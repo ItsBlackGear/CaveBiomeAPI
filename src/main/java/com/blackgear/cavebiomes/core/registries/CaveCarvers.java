@@ -1,6 +1,6 @@
 package com.blackgear.cavebiomes.core.registries;
 
-import com.blackgear.cavebiomes.common.world.features.carver.NoiseCarver;
+import com.blackgear.cavebiomes.common.world.feature.carver.NoiseCarver;
 import com.blackgear.cavebiomes.core.Caves;
 import net.minecraft.world.gen.carver.ICarverConfig;
 import net.minecraft.world.gen.carver.WorldCarver;

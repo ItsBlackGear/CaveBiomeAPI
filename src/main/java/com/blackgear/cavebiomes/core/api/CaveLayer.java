@@ -31,18 +31,18 @@ public class CaveLayer {
         caveBiomes.addAll(caveBiomeKeys.stream().map(biomeRegistry::getValueForKey).collect(Collectors.toList()));
         caveBiomeSet.addAll(caveBiomes);
 
-        LongFunction<IExtendedNoiseRandom<LazyArea>> provider = salt -> new LazyAreaLayerContext(25, seed, salt);
+        LongFunction<IExtendedNoiseRandom<LazyArea>> context = salt -> new LazyAreaLayerContext(25, seed, salt);
 
-        IAreaFactory<LazyArea> biomeFactory = new CaveMasterLayer(biomeRegistry, caveBiomes).apply(provider.apply(200L));
+        IAreaFactory<LazyArea> factory = new CaveMasterLayer(biomeRegistry, caveBiomes).apply(context.apply(200L));
 
         for (int size = 0; size < biomeSize; size++) {
             if ((size + 2) % 3 != 0) {
-                biomeFactory = ZoomLayer.NORMAL.apply(provider.apply(2001L + size), biomeFactory);
+                factory = ZoomLayer.NORMAL.apply(context.apply(2001L + size), factory);
             } else {
-                biomeFactory = ZoomLayer.NORMAL.apply(provider.apply(2000L + (size * 31L)), biomeFactory);
+                factory = ZoomLayer.NORMAL.apply(context.apply(2000L + (size * 31L)), factory);
             }
         }
 
-        return new Layer(biomeFactory);
+        return new Layer(factory);
     }
 }

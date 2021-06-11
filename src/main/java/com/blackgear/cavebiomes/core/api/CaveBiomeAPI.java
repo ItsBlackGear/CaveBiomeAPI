@@ -47,7 +47,7 @@ public class CaveBiomeAPI {
      * @see com.blackgear.cavebiomes.mixin.OverworldBiomeProviderMixin#getNoiseBiome(int, int, int)
      */
     public static Biome injectCaveBiomes(Biome surfaceBiomes, Registry<Biome> biomeRegistry, int xIn, int yIn, int zIn) {
-        if (CaveConfig.hasCaveBiomes.get()) {
+        if (CaveConfig.HAS_CAVE_BIOMES.get()) {
             if (yIn <= 12 && yIn >= 1) {
                 return sample(biomeRegistry, xIn, zIn);
             }
@@ -103,7 +103,7 @@ public class CaveBiomeAPI {
      * @see #addCaveBiome(Biome)
      */
     public static void addDefaultCaves() {
-        if (CaveConfig.hasDefaultCave.get()) {
+        if (CaveConfig.HAS_DEFAULT_CAVE.get()) {
             CaveBiomeAPI.addCaveBiome(CaveBiomes.CAVE.get());
         }
     }

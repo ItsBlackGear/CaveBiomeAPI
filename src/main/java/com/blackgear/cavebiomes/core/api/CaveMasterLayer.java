@@ -20,6 +20,6 @@ public class CaveMasterLayer implements IAreaTransformer0 {
 
     @Override
     public int apply(INoiseRandom random, int x, int z) {
-        return dynamicBiomeRegistry.getId(this.biomes.get(random.random(this.biomes.size())));
+        return this.dynamicBiomeRegistry.getId(this.biomes.get(random.random(this.biomes.size())));
     }
 }

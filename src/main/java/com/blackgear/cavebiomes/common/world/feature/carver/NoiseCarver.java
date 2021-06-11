@@ -1,5 +1,6 @@
-package com.blackgear.cavebiomes.common.world.features.carver;
+package com.blackgear.cavebiomes.common.world.feature.carver;
 
+import com.blackgear.cavebiomes.core.utils.ChunkSectionUtils;
 import com.mojang.serialization.Codec;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -7,7 +8,6 @@ import net.minecraft.util.SharedSeedRandom;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkSection;
 import net.minecraft.world.chunk.IChunk;
 import net.minecraft.world.gen.Heightmap;
@@ -27,7 +27,6 @@ import java.util.stream.IntStream;
  * @author SuperCoder79
  */
 public class NoiseCarver extends CaveWorldCarver {
-    private final ChunkSection[] sections = new ChunkSection[16];
     private long seed;
     private long worldSeed;
     private OctavesNoiseGenerator caveNoise;
@@ -91,7 +90,7 @@ public class NoiseCarver extends CaveWorldCarver {
 
             // [0, 4] -> z noise chunks
             for (noiseZ = 0; noiseZ < 4; ++noiseZ) {
-                ChunkSection section = this.getSection(15);
+                ChunkSection section = ChunkSectionUtils.getSection(chunkIn, 15);
 
 //                section.lock();
 
@@ -116,7 +115,7 @@ public class NoiseCarver extends CaveWorldCarver {
                         if (section.getYLocation() >> 4 != sectionY) {
 //                            section.unlock();
 
-                            section = this.getSection(sectionY);
+                            section = ChunkSectionUtils.getSection(chunkIn, sectionY);
 
 //                            section.lock();
                         }
@@ -244,14 +243,5 @@ public class NoiseCarver extends CaveWorldCarver {
     @Override
     public boolean shouldCarve(Random rand, int chunkX, int chunkZ, ProbabilityConfig config) {
         return rand.nextFloat() <= config.probability;
-    }
-
-    //terraforged fix
-    public ChunkSection getSection(int sectionId) {
-        if (this.sections[sectionId] == Chunk.EMPTY_SECTION) {
-            this.sections[sectionId] = new ChunkSection(sectionId << 4);
-        }
-
-        return this.sections[sectionId];
     }
 }

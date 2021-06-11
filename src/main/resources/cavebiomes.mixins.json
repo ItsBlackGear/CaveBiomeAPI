@@ -8,9 +8,9 @@
     "ChunkGeneratorMixin",
     "ColumnFuzzedBiomeMagnifierMixin",
     "LayerAccessor",
-    "OceanMonumentMixin",
+    "structure.OceanMonumentMixin",
     "OverworldBiomeProviderMixin",
-    "WoodlandMansionMixin",
+    "structure.WoodlandMansionMixin",
     "provider.BOPBiomeProviderMixin"
   ],
   "client": [

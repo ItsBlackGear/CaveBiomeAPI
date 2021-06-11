@@ -24,7 +24,7 @@ public class BOPBiomeProviderMixin {
 
     @Inject(method = "<init>", at = @At("RETURN"))
     public void initialize(long seed, Registry<Biome> biomes, CallbackInfo info) {
-        CaveBiomeAPI.initializeCaveBiomes(biomes, seed, CaveConfig.caveBiomeSize.get());
+        CaveBiomeAPI.initializeCaveBiomes(biomes, seed, CaveConfig.CAVE_BIOME_SIZE.get());
     }
 
     /**
