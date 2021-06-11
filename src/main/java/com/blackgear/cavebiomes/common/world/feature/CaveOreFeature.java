@@ -62,40 +62,40 @@ public class CaveOreFeature extends Feature<CaveOreFeatureConfig> {
         BitSet radius = new BitSet(horizontalSize * verticalSize * horizontalSize);
         BlockPos.Mutable mutable = new BlockPos.Mutable();
         int maxSize = config.size;
-        double[] ds = new double[maxSize * 4];
+        double[] totalDensity = new double[maxSize * 4];
 
         int size;
         double xDensity;
         double yDensity;
         double zDensity;
-        double w;
+        double noise;
         for(size = 0; size < maxSize; ++size) {
             float density = (float)size / (float)maxSize;
             xDensity = MathHelper.lerp(density, startX, endX);
             yDensity = MathHelper.lerp(density, startY, endY);
             zDensity = MathHelper.lerp(density, startZ, endZ);
-            w = rand.nextDouble() * (double)maxSize / 16.0D;
-            double l = ((double)(MathHelper.sin((float)Math.PI * density) + 1.0F) * w + 1.0D) / 2.0D;
-            ds[size * 4] = xDensity;
-            ds[size * 4 + 1] = yDensity;
-            ds[size * 4 + 2] = zDensity;
-            ds[size * 4 + 3] = l;
+            noise = rand.nextDouble() * (double)maxSize / 16.0D;
+            double noiseDensity = ((double)(MathHelper.sin((float)Math.PI * density) + 1.0F) * noise + 1.0D) / 2.0D;
+            totalDensity[size * 4] = xDensity;
+            totalDensity[size * 4 + 1] = yDensity;
+            totalDensity[size * 4 + 2] = zDensity;
+            totalDensity[size * 4 + 3] = noiseDensity;
         }
 
-        int n;
+        int size1;
         for(size = 0; size < maxSize - 1; ++size) {
-            if (!(ds[size * 4 + 3] <= 0.0D)) {
-                for(n = size + 1; n < maxSize; ++n) {
-                    if (!(ds[n * 4 + 3] <= 0.0D)) {
-                        xDensity = ds[size * 4] - ds[n * 4];
-                        yDensity = ds[size * 4 + 1] - ds[n * 4 + 1];
-                        zDensity = ds[size * 4 + 2] - ds[n * 4 + 2];
-                        w = ds[size * 4 + 3] - ds[n * 4 + 3];
-                        if (w * w > xDensity * xDensity + yDensity * yDensity + zDensity * zDensity) {
-                            if (w > 0.0D) {
-                                ds[n * 4 + 3] = -1.0D;
+            if (!(totalDensity[size * 4 + 3] <= 0.0D)) {
+                for(size1 = size + 1; size1 < maxSize; ++size1) {
+                    if (!(totalDensity[size1 * 4 + 3] <= 0.0D)) {
+                        xDensity = totalDensity[size * 4] - totalDensity[size1 * 4];
+                        yDensity = totalDensity[size * 4 + 1] - totalDensity[size1 * 4 + 1];
+                        zDensity = totalDensity[size * 4 + 2] - totalDensity[size1 * 4 + 2];
+                        noise = totalDensity[size * 4 + 3] - totalDensity[size1 * 4 + 3];
+                        if (noise * noise > xDensity * xDensity + yDensity * yDensity + zDensity * zDensity) {
+                            if (noise > 0.0D) {
+                                totalDensity[size1 * 4 + 3] = -1.0D;
                             } else {
-                                ds[size * 4 + 3] = -1.0D;
+                                totalDensity[size * 4 + 3] = -1.0D;
                             }
                         }
                     }
@@ -106,18 +106,18 @@ public class CaveOreFeature extends Feature<CaveOreFeatureConfig> {
         ChunkSectionCache sectionCache = new ChunkSectionCache(world);
 
         try {
-            for(n = 0; n < maxSize; ++n) {
-                xDensity = ds[n * 4 + 3];
+            for(size1 = 0; size1 < maxSize; ++size1) {
+                xDensity = totalDensity[size1 * 4 + 3];
                 if (!(xDensity < 0.0D)) {
-                    yDensity = ds[n * 4];
-                    zDensity = ds[n * 4 + 1];
-                    w = ds[n * 4 + 2];
+                    yDensity = totalDensity[size1 * 4];
+                    zDensity = totalDensity[size1 * 4 + 1];
+                    noise = totalDensity[size1 * 4 + 2];
                     int fromX = Math.max(MathHelper.floor(yDensity - xDensity), x);
                     int fromY = Math.max(MathHelper.floor(zDensity - xDensity), y);
-                    int fromZ = Math.max(MathHelper.floor(w - xDensity), z);
+                    int fromZ = Math.max(MathHelper.floor(noise - xDensity), z);
                     int toX = Math.max(MathHelper.floor(yDensity + xDensity), fromX);
                     int toY = Math.max(MathHelper.floor(zDensity + xDensity), fromY);
-                    int toZ = Math.max(MathHelper.floor(w + xDensity), fromZ);
+                    int toZ = Math.max(MathHelper.floor(noise + xDensity), fromZ);
 
                     for(int xArea = fromX; xArea <= toX; ++xArea) {
                         double xSize = ((double)xArea + 0.5D - yDensity) / xArea;
@@ -126,7 +126,7 @@ public class CaveOreFeature extends Feature<CaveOreFeatureConfig> {
                                 double ySize = ((double)yArea + 0.5D - zDensity) / xArea;
                                 if (xSize * xSize + ySize * ySize < 1.0D) {
                                     for(int zArea = fromZ; zArea <= toZ; ++zArea) {
-                                        double zSize = ((double)zArea + 0.5D - w) / xArea;
+                                        double zSize = ((double)zArea + 0.5D - noise) / xArea;
                                         if (xSize * xSize + ySize * ySize + zSize * zSize < 1.0D && !World.isYOutOfBounds(yArea)) {
                                             int totalSize = xArea - x + (yArea - y) * horizontalSize + (zArea - z) * horizontalSize * verticalSize;
                                             if (!radius.get(totalSize)) {
@@ -157,14 +157,14 @@ public class CaveOreFeature extends Feature<CaveOreFeatureConfig> {
                     }
                 }
             }
-        } catch (Throwable var60) {
+        } catch (Throwable throwable) {
             try {
                 sectionCache.close();
-            } catch (Throwable var59) {
-                var60.addSuppressed(var59);
+            } catch (Throwable throwable1) {
+                throwable.addSuppressed(throwable1);
             }
 
-            throw var60;
+            throw throwable;
         }
 
         sectionCache.close();
