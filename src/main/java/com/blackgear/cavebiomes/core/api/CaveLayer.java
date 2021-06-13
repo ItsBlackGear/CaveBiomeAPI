@@ -4,11 +4,13 @@ import net.minecraft.util.RegistryKey;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.IExtendedNoiseRandom;
+import net.minecraft.world.gen.INoiseRandom;
 import net.minecraft.world.gen.LazyAreaLayerContext;
 import net.minecraft.world.gen.area.IAreaFactory;
 import net.minecraft.world.gen.area.LazyArea;
 import net.minecraft.world.gen.layer.Layer;
 import net.minecraft.world.gen.layer.ZoomLayer;
+import net.minecraft.world.gen.layer.traits.IAreaTransformer0;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -33,7 +35,7 @@ public class CaveLayer {
 
         LongFunction<IExtendedNoiseRandom<LazyArea>> context = salt -> new LazyAreaLayerContext(25, seed, salt);
 
-        IAreaFactory<LazyArea> factory = new CaveMasterLayer(biomeRegistry, caveBiomes).apply(context.apply(200L));
+        IAreaFactory<LazyArea> factory = new CaveBiomeLayer(biomeRegistry, caveBiomes).apply(context.apply(200L));
 
         for (int size = 0; size < biomeSize; size++) {
             if ((size + 2) % 3 != 0) {
@@ -44,5 +46,20 @@ public class CaveLayer {
         }
 
         return new Layer(factory);
+    }
+
+    public static class CaveBiomeLayer implements IAreaTransformer0 {
+        public final Registry<Biome> dynamicBiomeRegistry;
+        private final List<Biome> biomes;
+
+        public CaveBiomeLayer(Registry<Biome> biomeRegistry, List<Biome> biomes) {
+            this.dynamicBiomeRegistry = biomeRegistry;
+            this.biomes = biomes;
+        }
+
+        @Override
+        public int apply(INoiseRandom random, int x, int z) {
+            return this.dynamicBiomeRegistry.getId(this.biomes.get(random.random(this.biomes.size())));
+        }
     }
 }

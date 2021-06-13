@@ -17,13 +17,13 @@ mixin {
 }
 
 group = 'com.blackgear'
-version = '1.0-SNAPSHOT'
+version = '2.0'
 archivesBaseName = 'cavebiomes'
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
 
 minecraft {
-    mappings channel: 'snapshot', version: '20210309-1.16.5'
+    mappings channel: 'snapshot', version: '20201028-1.16.3'
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
     runs {
@@ -73,7 +73,7 @@ minecraft {
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.16.5-36.1.16'
+    minecraft 'net.minecraftforge:forge:1.16.4-35.1.10'
 
     implementation fg.deobf("curse.maven:biomes-o-plenty-220318:3300293")
 
