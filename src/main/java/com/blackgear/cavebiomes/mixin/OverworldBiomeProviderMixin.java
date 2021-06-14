@@ -1,6 +1,5 @@
 package com.blackgear.cavebiomes.mixin;
 
-import com.blackgear.cavebiomes.core.CaveConfig;
 import com.blackgear.cavebiomes.core.api.CaveBiomeAPI;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.biome.Biome;
@@ -22,16 +21,17 @@ public class OverworldBiomeProviderMixin {
     @Shadow @Final private Registry<Biome> lookupRegistry;
 
     @Inject(method = "<init>", at = @At("RETURN"))
-    public void initialize(long seed, boolean legacyBiomeInitLayer, boolean largeBiomes, Registry<Biome> biomeRegistry, CallbackInfo ci) {
-        CaveBiomeAPI.initializeCaveBiomes(biomeRegistry, seed, CaveConfig.CAVE_BIOME_SIZE.get());
+    public void cba$initialize(long seed, boolean legacyBiomeInitLayer, boolean largeBiomes, Registry<Biome> biomeRegistry, CallbackInfo ci) {
+        CaveBiomeAPI.initializeCaveBiomes(biomeRegistry, seed);
     }
 
     /**
      * @author BlackGear27
+     * @reason collecting the surface biomes and injecting them along the underground biomes
      */
     @Overwrite
     public Biome getNoiseBiome(int xIn, int yIn, int zIn) {
         Biome surfaceBiome = this.genBiomes.func_242936_a(this.lookupRegistry, xIn, zIn);
-        return CaveBiomeAPI.injectCaveBiomes(surfaceBiome, this.lookupRegistry, xIn, yIn, zIn);
+        return CaveBiomeAPI.injectCaveBiomes(surfaceBiome, xIn, yIn, zIn);
     }
 }

@@ -4,24 +4,24 @@ issueTrackerURL = "https://github.com/ItsBlackGear/CaveBiomeAPI/issues"
 license = "All rights reserved"
 
 [[mods]]
-    modId = "cavebiomes"
+    modId = "cavebiomeapi"
     version = "2.0"
     logoFile = "cavebiomes.png"
     authors = "BlackGear27"
     credits = "BlackGear27, TelepathicGrunt, CorgiTaco"
     displayName = "CaveBiomeAPI"
     description = '''
-    The underground has never been a very interesting zone to explore to be honest. This mod allows developers to add actual underground biomes to give more life to the depths of our beloved worlds!
+    This mod allows developers to add actual underground biomes to give more life to the depths of our beloved worlds!
     '''
 
-[[dependencies.cavebiomes]]
+[[dependencies.cavebiomeapi]]
     modId = "forge"
     mandatory = true
     versionRange="[34.1.42,)"
     ordering = "NONE"
     side = "BOTH"
 
-[[dependencies.cavebiomes]]
+[[dependencies.cavebiomeapi]]
     modId = "minecraft"
     mandatory = true
     versionRange = "[1.16.3,1.17)"

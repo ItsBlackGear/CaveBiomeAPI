@@ -5,13 +5,15 @@
   "compatibilityLevel": "JAVA_8",
   "refmap": "cavebiomes.refmap.json",
   "mixins": [
+    "BiomeManagerMixin",
     "ChunkGeneratorMixin",
     "ColumnFuzzedBiomeMagnifierMixin",
-    "LayerAccessor",
-    "structure.OceanMonumentMixin",
+    "NetherBiomeProviderAccessor",
+    "NoiseChunkGeneratorMixin",
     "OverworldBiomeProviderMixin",
-    "structure.WoodlandMansionMixin",
-    "provider.BOPBiomeProviderMixin"
+    "provider.BOPBiomeProviderMixin",
+    "structure.OceanMonumentMixin",
+    "structure.WoodlandMansionMixin"
   ],
   "client": [
   ],

@@ -15,12 +15,16 @@ import net.minecraft.world.gen.feature.structure.StructureManager;
 import java.util.List;
 import java.util.function.Supplier;
 
-public class FeatureGenerationHelper {
+//<>
 
+/**
+ * @author TelepathicGrunt
+ */
+public class FeatureGenerationHelper {
     /**
      * Will not spawn any structure and instead, only features.
      */
-    public static void generateOnlyFeatures(Biome biome, StructureManager structureManager, ChunkGenerator chunkGenerator, WorldGenRegion worldGenRegion, long seed, SharedSeedRandom rand, BlockPos pos) {
+    public static void generateOnlyFeatures(Biome biome, ChunkGenerator chunkGenerator, WorldGenRegion worldGenRegion, long seed, SharedSeedRandom rand, BlockPos pos) {
         List<List<Supplier<ConfiguredFeature<?, ?>>>> list = biome.getGenerationSettings().getFeatures();
         for (int generationStageIndex = 0; generationStageIndex < GenerationStage.Decoration.values().length; ++generationStageIndex) {
             int featureIndex = 1001; // offset index by 1001 so decorators for features do not exactly line up with features on surface biomes.

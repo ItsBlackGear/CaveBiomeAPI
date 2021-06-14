@@ -1,6 +1,5 @@
 package com.blackgear.cavebiomes.common.world.feature;
 
-import com.blackgear.cavebiomes.compat.DarkerDepths;
 import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -54,7 +53,7 @@ public class CaveOreFeatureConfig implements IFeatureConfig {
 
     public static class Target {
         public static final Codec<Target> CODEC = RecordCodecBuilder.create((instance) -> {
-            return instance.group(RuleTest.field_237127_c_.fieldOf("target").forGetter((target) -> {
+            return instance.group(RuleTest.CODEC.fieldOf("target").forGetter((target) -> {
                 return target.target;
             }), BlockState.CODEC.fieldOf("state").forGetter((target) -> {
                 return target.state;
@@ -70,15 +69,9 @@ public class CaveOreFeatureConfig implements IFeatureConfig {
     }
 
     public static final class Rules {
-        //DEFAULT ORE REPLACEABLES
         public static final RuleTest BASE_STONE_OVERWORLD = new TagMatchRuleTest(BlockTags.BASE_STONE_OVERWORLD);
         public static final RuleTest STONE_ORE_REPLACEABLES = new TagMatchRuleTest(BlockTags.BASE_STONE_OVERWORLD);
         public static final RuleTest NETHERRACK = new BlockMatchRuleTest(Blocks.NETHERRACK);
         public static final RuleTest BASE_STONE_NETHER = new TagMatchRuleTest(BlockTags.BASE_STONE_NETHER);
-
-        //COMPATIBILITY ORE REPLACEABLES
-        public static final RuleTest DEEPSLATE_ORE_REPLACEABLES = new TagMatchRuleTest(BlockTags.BASE_STONE_OVERWORLD);
-        public static final RuleTest ARIDROCK_ORE_REPLACEABLES = new BlockMatchRuleTest(DarkerDepths.ARIDROCK);
-        public static final RuleTest LIMESTONE_ORE_REPLACEABLES = new BlockMatchRuleTest(DarkerDepths.LIMESTONE);
     }
 }

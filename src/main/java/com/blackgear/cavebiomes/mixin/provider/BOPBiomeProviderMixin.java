@@ -23,16 +23,17 @@ public class BOPBiomeProviderMixin {
     @Shadow @Final private Registry<Biome> biomes;
 
     @Inject(method = "<init>", at = @At("RETURN"))
-    public void initialize(long seed, Registry<Biome> biomes, CallbackInfo info) {
-        CaveBiomeAPI.initializeCaveBiomes(biomes, seed, CaveConfig.CAVE_BIOME_SIZE.get());
+    public void cba$initialize(long seed, Registry<Biome> biomes, CallbackInfo info) {
+        CaveBiomeAPI.initializeCaveBiomes(biomes, seed);
     }
 
     /**
      * @author BlackGear27
+     * @reason collecting the surface biomes and injecting them along the underground biomes
      */
     @Overwrite
     public Biome getNoiseBiome(int xIn, int yIn, int zIn) {
         Biome surfaceBiome = this.noiseBiomeLayer.func_242936_a(this.biomes, xIn, zIn);
-        return CaveBiomeAPI.injectCaveBiomes(surfaceBiome, this.biomes, xIn, yIn, zIn);
+        return CaveBiomeAPI.injectCaveBiomes(surfaceBiome, xIn, yIn, zIn);
     }
 }

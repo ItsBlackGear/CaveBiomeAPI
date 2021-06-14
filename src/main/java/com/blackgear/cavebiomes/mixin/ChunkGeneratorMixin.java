@@ -21,59 +21,45 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 //<>
 
+/**
+ * Special thanks to TelepathicGrunt that helped to fix not one but almost every issue with this code on it's experimental stage.
+ */
 @Mixin(ChunkGenerator.class)
 public class ChunkGeneratorMixin {
     @Shadow @Final protected BiomeProvider biomeProvider;
 
-//    /**
-//     * @author BlackGear27 & CorgiTaco
-//     */
-//    @Overwrite
-//    public void func_230351_a_(WorldGenRegion region, StructureManager manager) {
-//        int mainChunkX = region.getMainChunkX();
-//        int mainChunkZ = region.getMainChunkZ();
-//        int x = mainChunkX * 16;
-//        int z = mainChunkZ * 16;
-//        BlockPos pos = new BlockPos(x, 0, z);
-//        Biome biome = this.biomeProvider.getNoiseBiome(BiomeCoordinates.fromChunk(mainChunkX) + BiomeCoordinates.fromBlock(8), 64, BiomeCoordinates.fromChunk(mainChunkZ) + BiomeCoordinates.fromBlock(8));
-//        Biome caveBiome = this.biomeProvider.getNoiseBiome(BiomeCoordinates.fromChunk(mainChunkX) + BiomeCoordinates.fromBlock(8), 5, BiomeCoordinates.fromChunk(mainChunkZ) + BiomeCoordinates.fromBlock(8));
-//        SharedSeedRandom random = new SharedSeedRandom();
-//        long seed = random.setDecorationSeed(region.getSeed(), x, z);
-//
-//        try {
-//            biome.generateFeatures(manager, (ChunkGenerator)(Object)this, region, seed, random, pos);
-//            caveBiome.generateFeatures(manager, (ChunkGenerator)(Object)this, region, seed, random, pos);
-//        } catch (Exception exception) {
-//            CrashReport crashReport = CrashReport.makeCrashReport(exception, "Biome decoration");
-//            crashReport.makeCategory("Generation").addDetail("CenterX", mainChunkX).addDetail("CenterZ", mainChunkZ).addDetail("Seed", seed).addDetail("Biome", biome).addDetail("CaveBiome", caveBiome);
-//            throw new ReportedException(crashReport);
-//        }
-//    }
-
-    @Redirect(method = "func_230351_a_", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/biome/provider/BiomeProvider;getNoiseBiome(III)Lnet/minecraft/world/biome/Biome;"))
-    private Biome generateSurfaceFeatures(BiomeProvider provider, int x, int y, int z) {
+    @Redirect(method = "func_230351_a_(Lnet/minecraft/world/gen/WorldGenRegion;Lnet/minecraft/world/gen/feature/structure/StructureManager;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/biome/provider/BiomeProvider;getNoiseBiome(III)Lnet/minecraft/world/biome/Biome;"))
+    private Biome cba$generateSurfaceFeatures(BiomeProvider provider, int x, int y, int z) {
         return provider.getNoiseBiome(x, 64, z);
     }
 
-    @Inject(method = "func_230351_a_", at = @At("RETURN"), cancellable = true)
-    private void generateUndergroundFeatures(WorldGenRegion region, StructureManager manager, CallbackInfo ci) {
+    @Inject(method = "func_230351_a_(Lnet/minecraft/world/gen/WorldGenRegion;Lnet/minecraft/world/gen/feature/structure/StructureManager;)V", at = @At("RETURN"), cancellable = true)
+    private void cba$generateUndergroundFeatures(WorldGenRegion region, StructureManager manager, CallbackInfo ci) {
         int mainChunkX = region.getMainChunkX();
         int mainChunkZ = region.getMainChunkZ();
         int x = mainChunkX * 16;
         int z = mainChunkZ * 16;
         BlockPos pos = new BlockPos(x, 0, z);
         Biome biome = this.biomeProvider.getNoiseBiome((x << 2) + 2, 10, (z << 2) + 2);
-        if(!CaveLayer.caveBiomeSet.contains(biome)) return;
+        if(!CaveLayer.CAVE_BIOME_LIST.contains(biome)) return;
 
         SharedSeedRandom seedRandom = new SharedSeedRandom();
         long seed = seedRandom.setDecorationSeed(region.getSeed(), x, z);
 
         try {
-            FeatureGenerationHelper.generateOnlyFeatures(biome, manager, (ChunkGenerator)(Object)this, region, seed, seedRandom, pos);
+            FeatureGenerationHelper.generateOnlyFeatures(biome, (ChunkGenerator)(Object)this, region, seed, seedRandom, pos);
         } catch (Exception exception) {
             CrashReport report = CrashReport.makeCrashReport(exception, "Biome decoration");
             report.makeCategory("Generation").addDetail("CenterX", mainChunkX).addDetail("CenterZ", mainChunkZ).addDetail("Seed", seed).addDetail("Biome", biome);
             throw new ReportedException(report);
         }
+    }
+
+    /**
+     * @author TelepathicGrunt
+     */
+    @Redirect(method = "func_242707_a(Lnet/minecraft/util/registry/DynamicRegistries;Lnet/minecraft/world/gen/feature/structure/StructureManager;Lnet/minecraft/world/chunk/IChunk;Lnet/minecraft/world/gen/feature/template/TemplateManager;J)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/biome/provider/BiomeProvider;getNoiseBiome(III)Lnet/minecraft/world/biome/Biome;"))
+    private Biome cba$setStructureStarts(BiomeProvider biomeProvider, int x, int y, int z) {
+        return biomeProvider.getNoiseBiome(x, 64, z);
     }
 }

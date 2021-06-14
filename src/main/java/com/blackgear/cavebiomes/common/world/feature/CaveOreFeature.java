@@ -56,7 +56,6 @@ public class CaveOreFeature extends Feature<CaveOreFeatureConfig> {
         return false;
     }
 
-
     protected boolean generateVeinPart(IWorldReader world, Random rand, CaveOreFeatureConfig config, double startX, double endX, double startZ, double endZ, double startY, double endY, int x, int y, int z, int horizontalSize, int verticalSize) {
         int index = 0;
         BitSet radius = new BitSet(horizontalSize * verticalSize * horizontalSize);
