@@ -1,6 +1,6 @@
 package com.blackgear.cavebiomes.core.registries;
 
-import com.blackgear.cavebiomes.core.CavesAPI;
+import com.blackgear.cavebiomes.core.CaveBiome;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeAmbience;
@@ -19,7 +19,7 @@ import java.util.function.Supplier;
 //<>
 
 public class CaveBiomes {
-    public static final DeferredRegister<Biome> BIOMES = DeferredRegister.create(ForgeRegistries.BIOMES, CavesAPI.MOD_ID);
+    public static final DeferredRegister<Biome> BIOMES = DeferredRegister.create(ForgeRegistries.BIOMES, CaveBiome.MOD_ID);
 
     public static final RegistryObject<Biome> CAVE = registerBiome("caves", CaveBiomes::makeDefaultCaves);
 
