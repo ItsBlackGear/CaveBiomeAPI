@@ -1,6 +1,6 @@
 package com.blackgear.cavebiomes.core.api;
 
-import com.blackgear.cavebiomes.core.CaveBiome;
+import com.blackgear.cavebiomes.core.CavesAPI;
 import com.blackgear.cavebiomes.mixin.NetherBiomeProviderAccessor;
 import com.google.common.base.Preconditions;
 import com.mojang.datafixers.util.Pair;
@@ -38,7 +38,7 @@ public class CaveLayer {
         CAVE_BIOMES.put(biome, noise);
     }
 
-    public static final NetherBiomeProvider.Preset CENTER_BIOME_PROVIDER = new NetherBiomeProvider.Preset(new ResourceLocation(CaveBiome.MOD_ID, "cave_biome_provider"), (preset, biomeRegistry, seed) -> {
+    public static final NetherBiomeProvider.Preset CENTER_BIOME_PROVIDER = new NetherBiomeProvider.Preset(new ResourceLocation(CavesAPI.MOD_ID, "cave_biome_provider"), (preset, biomeRegistry, seed) -> {
         List<Pair<Biome.Attributes, Supplier<Biome>>> biomes = new ArrayList<>();
         CAVE_BIOMES.forEach((biomeKey, noisePoint) -> {
             Biome biome = biomeRegistry.getOrThrow(biomeKey);

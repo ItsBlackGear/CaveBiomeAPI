@@ -1,6 +1,7 @@
 package com.blackgear.cavebiomes.mixin.provider;
 
 import biomesoplenty.common.world.BOPBiomeProvider;
+import com.blackgear.cavebiomes.core.CaveConfig;
 import com.blackgear.cavebiomes.core.api.CaveBiomeAPI;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.biome.Biome;

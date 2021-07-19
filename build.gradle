@@ -17,7 +17,7 @@ mixin {
 }
 
 group = 'com.blackgear'
-version = '1.1.0'
+version = '2.0'
 archivesBaseName = 'cavebiomes'
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
@@ -74,7 +74,9 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 dependencies {
     minecraft 'net.minecraftforge:forge:1.16.4-35.1.10'
+
     implementation fg.deobf("curse.maven:biomes-o-plenty-220318:3300293")
+
     annotationProcessor 'org.spongepowered:mixin:0.8.2:processor'
 }
 

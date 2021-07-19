@@ -1,7 +1,7 @@
 package com.blackgear.cavebiomes.core.registries;
 
 import com.blackgear.cavebiomes.common.world.feature.carver.NoiseCarver;
-import com.blackgear.cavebiomes.core.CaveBiome;
+import com.blackgear.cavebiomes.core.CavesAPI;
 import net.minecraft.world.gen.carver.ICarverConfig;
 import net.minecraft.world.gen.carver.WorldCarver;
 import net.minecraft.world.gen.feature.ProbabilityConfig;
@@ -14,7 +14,7 @@ import java.util.function.Supplier;
 //<>
 
 public class CaveCarvers {
-    public static final DeferredRegister<WorldCarver<?>> CARVERS = DeferredRegister.create(ForgeRegistries.WORLD_CARVERS, CaveBiome.MOD_ID);
+    public static final DeferredRegister<WorldCarver<?>> CARVERS = DeferredRegister.create(ForgeRegistries.WORLD_CARVERS, CavesAPI.MOD_ID);
 
     public static final RegistryObject<WorldCarver<ProbabilityConfig>> NOISE_CARVER = registerCarver("noise_carver", () -> new NoiseCarver(ProbabilityConfig.CODEC));
 

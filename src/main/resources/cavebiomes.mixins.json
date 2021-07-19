@@ -11,12 +11,9 @@
     "NetherBiomeProviderAccessor",
     "NoiseChunkGeneratorMixin",
     "OverworldBiomeProviderMixin",
-    "carver.WorldCarverMixin",
-    "feature.DefaultBiomeFeaturesMixin",
     "provider.BOPBiomeProviderMixin",
     "structure.OceanMonumentMixin",
-    "structure.WoodlandMansionMixin",
-    "surfacebuilder.SurfaceBuilderMixin"
+    "structure.WoodlandMansionMixin"
   ],
   "client": [
   ],

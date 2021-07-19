@@ -1,6 +1,6 @@
 package com.blackgear.cavebiomes.common.events;
 
-import com.blackgear.cavebiomes.core.CaveBiome;
+import com.blackgear.cavebiomes.core.CavesAPI;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.event.RegistryEvent;
@@ -16,7 +16,7 @@ public class RemapEvent {
     public void updateBiomeID(RegistryEvent.MissingMappings<Biome> event) {
         for (RegistryEvent.MissingMappings.Mapping<Biome> mapping : event.getAllMappings()) {
             if (mapping.key.getNamespace().equals("bgcore") || mapping.key.getNamespace().equals("cavebiomes")) {
-                mapping.remap(ForgeRegistries.BIOMES.getValue(new ResourceLocation(CaveBiome.MOD_ID, mapping.key.getPath())));
+                mapping.remap(ForgeRegistries.BIOMES.getValue(new ResourceLocation(CavesAPI.MOD_ID, mapping.key.getPath())));
             }
         }
     }

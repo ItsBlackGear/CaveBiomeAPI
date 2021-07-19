@@ -1,6 +1,6 @@
 package com.blackgear.cavebiomes.core.api;
 
-import com.blackgear.cavebiomes.core.CaveBiomeConfig;
+import com.blackgear.cavebiomes.core.CaveConfig;
 import com.blackgear.cavebiomes.core.registries.CaveBiomes;
 import net.minecraft.util.RegistryKey;
 import net.minecraft.util.registry.Registry;
@@ -40,8 +40,10 @@ public class CaveBiomeAPI {
      * @see com.blackgear.cavebiomes.mixin.OverworldBiomeProviderMixin#getNoiseBiome(int, int, int)
      */
     public static Biome injectCaveBiomes(Biome surfaceBiomes, int x, int y, int z) {
-        if (y <= 12) {
-            return caveBiomeProvider.getNoiseBiome(x, 0, z);
+        if (CaveConfig.shouldGenerateCaveBiomes.get()) {
+            if (y <= 12) {
+                return caveBiomeProvider.getNoiseBiome(x, 0, z);
+            }
         }
         return surfaceBiomes;
     }
@@ -76,7 +78,7 @@ public class CaveBiomeAPI {
      * @see #addCaveBiome(Biome, Biome.Attributes)
      */
     public static void addDefaultCaves() {
-        if (CaveBiomeConfig.generateDefaultCave.get()) {
+        if (CaveConfig.HAS_DEFAULT_CAVE.get()) {
             CaveBiomeAPI.addCaveBiome(CaveBiomes.CAVE.get(), new Biome.Attributes(0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
         }
     }
