@@ -5,6 +5,7 @@
   "compatibilityLevel": "JAVA_8",
   "refmap": "cavebiomes.refmap.json",
   "mixins": [
+    "BiomeColorsMixin",
     "BiomeManagerMixin",
     "ChunkGeneratorMixin",
     "ColumnFuzzedBiomeMagnifierMixin",

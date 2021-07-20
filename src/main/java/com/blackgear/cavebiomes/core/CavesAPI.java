@@ -36,7 +36,7 @@ public class CavesAPI {
         CaveCarvers.CARVERS.register(modEventBus);
 
         modEventBus.addListener(this::commonSetup);
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CaveConfig.COMMON_CONFIG);
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CaveConfig.common);
     }
 
     private void commonSetup(FMLCommonSetupEvent event) {

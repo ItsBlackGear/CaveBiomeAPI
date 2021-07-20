@@ -17,7 +17,7 @@ mixin {
 }
 
 group = 'com.blackgear'
-version = '2.0'
+version = '1.2.0'
 archivesBaseName = 'cavebiomes'
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'

@@ -1,18 +1,15 @@
 modLoader = "javafml"
 loaderVersion = "[32,)"
 issueTrackerURL = "https://github.com/ItsBlackGear/CaveBiomeAPI/issues"
-license = "All rights reserved"
 
 [[mods]]
     modId = "cavebiomeapi"
-    version = "2.0"
+    version = "1.2.0"
     logoFile = "cavebiomes.png"
     authors = "BlackGear27"
     credits = "BlackGear27, TelepathicGrunt, CorgiTaco"
     displayName = "CaveBiomeAPI"
-    description = '''
-    This mod allows developers to add actual underground biomes to give more life to the depths of our beloved worlds!
-    '''
+    description = '''This mod allows developers to add actual underground biomes to give more life to the depths of our beloved worlds!'''
 
 [[dependencies.cavebiomeapi]]
     modId = "forge"

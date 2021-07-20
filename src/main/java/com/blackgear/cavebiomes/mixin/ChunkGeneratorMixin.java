@@ -62,4 +62,9 @@ public class ChunkGeneratorMixin {
     private Biome cba$setStructureStarts(BiomeProvider biomeProvider, int x, int y, int z) {
         return biomeProvider.getNoiseBiome(x, 64, z);
     }
+
+    @Redirect(method = "func_230350_a_(JLnet/minecraft/world/biome/BiomeManager;Lnet/minecraft/world/chunk/IChunk;Lnet/minecraft/world/gen/GenerationStage$Carving;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/biome/provider/BiomeProvider;getNoiseBiome(III)Lnet/minecraft/world/biome/Biome;"))
+    private Biome cba$generateSurfaceCarvers(BiomeProvider provider, int x, int y, int z) {
+        return provider.getNoiseBiome(x, 64, z);
+    }
 }
