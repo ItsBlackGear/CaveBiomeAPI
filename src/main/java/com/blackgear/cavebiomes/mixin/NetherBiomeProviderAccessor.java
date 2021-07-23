@@ -19,7 +19,7 @@ import java.util.function.Supplier;
 @Mixin(NetherBiomeProvider.class)
 public interface NetherBiomeProviderAccessor {
     @Invoker("<init>")
-    public static NetherBiomeProvider createMultiNoiseBiomeProvider(long seed, List<Pair<Biome.Attributes, Supplier<Biome>>> biomePoints, Optional<Pair<Registry<Biome>, NetherBiomeProvider.Preset>> instance) {
+    public static NetherBiomeProvider createNetherBiomeProvider(long seed, List<Pair<Biome.Attributes, Supplier<Biome>>> biomePoints, NetherBiomeProvider.Noise temperatureNoiseParameters, NetherBiomeProvider.Noise humidityNoiseParameters, NetherBiomeProvider.Noise altitudeNoiseParameters, NetherBiomeProvider.Noise weirdnessNoiseParameters, Optional<Pair<Registry<Biome>, NetherBiomeProvider.Preset>> instance) {
         throw new UnsupportedOperationException();
     }
 }

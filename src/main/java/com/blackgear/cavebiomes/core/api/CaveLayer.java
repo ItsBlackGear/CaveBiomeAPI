@@ -4,6 +4,7 @@ import com.blackgear.cavebiomes.core.CavesAPI;
 import com.blackgear.cavebiomes.mixin.NetherBiomeProviderAccessor;
 import com.google.common.base.Preconditions;
 import com.mojang.datafixers.util.Pair;
+import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
 import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.Registry;
@@ -44,6 +45,15 @@ public class CaveLayer {
             Biome biome = biomeRegistry.getOrThrow(biomeKey);
             biomes.add(Pair.of(noisePoint, () -> biome));
         });
-        return NetherBiomeProviderAccessor.createMultiNoiseBiomeProvider(seed, biomes, Optional.of(Pair.of(biomeRegistry, preset)));
+        NetherBiomeProvider.Noise temperatureNoise = createNoiseParameters(-9, 1.0D, 0.0D, 3.0D, 3.0D, 3.0D, 3.0D);
+        NetherBiomeProvider.Noise humidityNoise = createNoiseParameters(-7, 1.0D, 2.0D, 4.0D, 4.0D);
+        NetherBiomeProvider.Noise altitudeNoise = createNoiseParameters(-9, 1.0D, 0.0D, 0.0D, 1.0D, 1.0D, 0.0D);
+        NetherBiomeProvider.Noise weirdnessNoise = createNoiseParameters(-8, 1.2D, 0.6D, 0.0D, 0.0D, 1.0D, 0.0D);
+
+        return NetherBiomeProviderAccessor.createNetherBiomeProvider(seed, biomes, temperatureNoise, humidityNoise, altitudeNoise, weirdnessNoise, Optional.empty());
     });
+
+    private static NetherBiomeProvider.Noise createNoiseParameters(int firstOctave, double... amplitudes) {
+        return new NetherBiomeProvider.Noise(firstOctave, new DoubleArrayList(amplitudes));
+    }
 }
