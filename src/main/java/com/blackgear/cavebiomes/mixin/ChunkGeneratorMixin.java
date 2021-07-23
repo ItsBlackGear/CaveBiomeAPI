@@ -40,7 +40,7 @@ public class ChunkGeneratorMixin {
         int x = mainChunkX * 16;
         int z = mainChunkZ * 16;
         BlockPos pos = new BlockPos(x, 0, z);
-        Biome biome = this.biomeProvider.getNoiseBiome((x << 2) + 2, 10, (z << 2) + 2);
+        Biome biome = this.biomeProvider.getNoiseBiome((mainChunkX << 2) + 2, 10, (mainChunkZ << 2) + 2);
         if(!CaveLayer.CAVE_BIOME_LIST.contains(biome)) return;
 
         SharedSeedRandom seedRandom = new SharedSeedRandom();

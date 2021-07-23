@@ -22,7 +22,7 @@ public abstract class BiomeColorsMixin {
 
     @Shadow
     private static int getBlockColor(IBlockDisplayReader worldIn, BlockPos blockPosIn, ColorResolver colorResolverIn) {
-        return 0;
+        return worldIn.getBlockColor(blockPosIn, colorResolverIn);
     }
 
     @Inject(method = "getGrassColor", at = @At("HEAD"), cancellable = true)
