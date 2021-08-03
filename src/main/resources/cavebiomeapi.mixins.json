@@ -3,7 +3,7 @@
   "minVersion": "0.8",
   "package": "com.blackgear.cavebiomes.mixin",
   "compatibilityLevel": "JAVA_8",
-  "refmap": "cavebiomes.refmap.json",
+  "refmap": "cavebiomeapi.refmap.json",
   "mixins": [
     "BiomeColorsMixin",
     "BiomeManagerMixin",

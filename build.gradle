@@ -1,29 +1,33 @@
 buildscript {
     repositories {
-        maven { url = 'https://files.minecraftforge.net/maven' }
+        maven { url = 'https://maven.minecraftforge.net' }
         maven { url = 'https://repo.spongepowered.org/repository/maven-public/' }
+//        mavenCentral()
     }
     dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
-        classpath group: 'org.spongepowered', name: 'mixingradle', version: '0.7-SNAPSHOT'
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '4.1.+', changing: true
+        classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
     }
 }
 
 apply plugin: 'net.minecraftforge.gradle'
+apply plugin: "eclipse"
+apply plugin: "maven-publish"
 apply plugin: 'org.spongepowered.mixin'
 
 mixin {
-    add sourceSets.main, "cavebiomes.refmap.json"
+    add sourceSets.main, "${project.modId}.refmap.json"
 }
 
 group = 'com.blackgear'
-version = '1.2.1'
-archivesBaseName = 'cavebiomes'
+version = "${project.minecraft}-${project.modVersion}"
+archivesBaseName = project.modId
 
-sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
+java.toolchain.languageVersion = JavaLanguageVersion.of(8) // Mojang ships Java 8 to end users, so your mod should target Java 8.
 
 minecraft {
-    mappings channel: 'snapshot', version: '20210309-1.16.5'
+    mappings channel: project.mappingsChannel, version: project.mappings
+//    mappings channel: 'snapshot', version: '20210309-1.16.5'
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
     runs {
@@ -31,24 +35,20 @@ minecraft {
             workingDirectory project.file('run')
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
             property 'forge.logging.console.level', 'debug'
-            arg "-mixin.config=cavebiomes.mixins.json"
-
+            arg "-mixin.config=" + project.modId + ".mixins.json"
             mods {
-                caves {
+                cavebiomeapi {
                     source sourceSets.main
                 }
             }
         }
-
         server {
             workingDirectory project.file('run')
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
             property 'forge.logging.console.level', 'debug'
-//            property "mixin.env.disableRefMap", "true"
-            arg "-mixin.config=cavebiomes.mixins.json"
-
+            arg "-mixin.config=" + project.modId + ".mixins.json"
             mods {
-                caves {
+                cavebiomeapi {
                     source sourceSets.main
                 }
             }
@@ -58,11 +58,10 @@ minecraft {
             workingDirectory project.file('run')
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
             property 'forge.logging.console.level', 'debug'
-//            property "mixin.env.disableRefMap", "true"
-            args '--mod', 'caves', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
-
+            property 'mixin.env.disableRefMap', 'true'
+            args '--mod', 'cavebiomeapi', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
             mods {
-                caves {
+                cavebiomeapi {
                     source sourceSets.main
                 }
             }
@@ -70,35 +69,30 @@ minecraft {
     }
 }
 
-sourceSets.main.resources { srcDir 'src/generated/resources' }
-
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.16.4-35.1.10'
+    minecraft "net.minecraftforge:forge:1.16.5-36.1.0"
+//    minecraft "net.minecraftforge:forge:${project.minecraft}-${project.forge}"
 
     implementation fg.deobf("curse.maven:biomes-o-plenty-220318:3300293")
 
-    annotationProcessor 'org.spongepowered:mixin:0.8.2:processor'
+    annotationProcessor 'org.spongepowered:mixin:0.8:processor'
 }
 
 repositories{
-    maven {
-        url = "https://www.cursemaven.com"
-    }
+    maven { url = "https://www.cursemaven.com" }
 }
 
 jar {
     manifest {
         attributes([
-                "Specification-Title"     : "caves",
-                //"Specification-Vendor": "caves authors",
-                "Specification-Version"   : "1", // We are version 1 of ourselves
-                "Implementation-Title"    : project.name,
-                "Implementation-Version"  : project.version,
-                //"Implementation-Vendor": "caves authors",
-                "MixinConfigs"            : "cavebiomes.mixins.json",
-                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+                "Specification-Title"     : project.modName,
+                "Specification-Vendor"    : "BlackGear27",
+                "Specification-Version"   : "1",
+                "Implementation-Title"    : project.modName,
+                "Implementation-Version"  : project.modVersion,
+                "Implementation-Vendor"   : "BlackGear27",
+                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+                "MixinConfigs"            : project.modId + ".mixins.json"
         ])
     }
 }
-
-jar.finalizedBy('reobfJar')

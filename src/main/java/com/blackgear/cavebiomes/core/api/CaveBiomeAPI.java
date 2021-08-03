@@ -39,7 +39,9 @@ public class CaveBiomeAPI {
      * @see com.blackgear.cavebiomes.mixin.OverworldBiomeProviderMixin#getNoiseBiome(int, int, int)
      */
     public static Biome injectCaveBiomes(Biome surfaceBiomes, int x, int y, int z) {
-        if (y <= 12) {
+        boolean isOceanBiome = surfaceBiomes.getCategory().equals(Biome.Category.OCEAN);
+        int height = isOceanBiome ? 7 : 12;
+        if (y <= height) {
             return caveBiomeProvider.getNoiseBiome(x, 0, z);
         }
         return surfaceBiomes;

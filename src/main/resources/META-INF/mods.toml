@@ -5,7 +5,7 @@ license = "LGPL-3.0"
 
 [[mods]]
     modId = "cavebiomeapi"
-    version = "1.2.0"
+    version = "1.2.4"
     logoFile = "cavebiomes.png"
     authors = "BlackGear27"
     credits = "BlackGear27, TelepathicGrunt, CorgiTaco"
@@ -13,15 +13,15 @@ license = "LGPL-3.0"
     description = '''This mod allows developers to add actual underground biomes to give more life to the depths of our beloved worlds!'''
 
 [[dependencies.cavebiomeapi]]
-    modId = "forge"
+    modId = "minecraft"
     mandatory = true
-    versionRange="[34.1.42,)"
-    ordering = "NONE"
+    versionRange = "[1.16.5,1.17)"
+    ordering = "AFTER"
     side = "BOTH"
 
 [[dependencies.cavebiomeapi]]
-    modId = "minecraft"
+    modId = "forge"
     mandatory = true
-    versionRange = "[1.16.3,1.17)"
-    ordering = "AFTER"
+    versionRange="[36.1.0,)"
+    ordering = "NONE"
     side = "BOTH"
