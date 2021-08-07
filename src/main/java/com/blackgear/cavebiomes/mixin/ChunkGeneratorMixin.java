@@ -13,6 +13,7 @@ import net.minecraft.world.gen.WorldGenRegion;
 import net.minecraft.world.gen.feature.structure.StructureManager;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -28,8 +29,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class ChunkGeneratorMixin {
     @Shadow @Final protected BiomeProvider biomeProvider;
 
-    @Redirect(method = "func_230351_a_", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/biome/provider/BiomeProvider;getNoiseBiome(III)Lnet/minecraft/world/biome/Biome;"))
-//    @Redirect(method = "func_230351_a_(Lnet/minecraft/world/gen/WorldGenRegion;Lnet/minecraft/world/gen/feature/structure/StructureManager;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/biome/provider/BiomeProvider;getNoiseBiome(III)Lnet/minecraft/world/biome/Biome;"), remap = false)
+//    @Redirect(method = "func_230351_a_", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/biome/provider/BiomeProvider;getNoiseBiome(III)Lnet/minecraft/world/biome/Biome;"))
+    @Redirect(method = "func_230351_a_(Lnet/minecraft/world/gen/WorldGenRegion;Lnet/minecraft/world/gen/feature/structure/StructureManager;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/biome/provider/BiomeProvider;getNoiseBiome(III)Lnet/minecraft/world/biome/Biome;"), remap = false)
     private Biome cba$generateSurfaceFeatures(BiomeProvider provider, int x, int y, int z) {
         return provider.getNoiseBiome(x, 64, z);
     }
@@ -56,6 +57,33 @@ public class ChunkGeneratorMixin {
             throw new ReportedException(report);
         }
     }
+
+//    /**
+//     * @author BlackGear27
+//     * @reason constant crash caused by redirect
+//     */
+//    @Overwrite
+//    public void func_230351_a_(WorldGenRegion region, StructureManager manager) {
+//        int centerX = region.getMainChunkX();
+//        int centerZ = region.getMainChunkZ();
+//        int x = centerX * 16;
+//        int z = centerZ * 16;
+//        BlockPos pos = new BlockPos(x, 0, z);
+//        Biome surfaceBiome = this.biomeProvider.getNoiseBiome((centerX << 2) + 2, 64, (centerZ << 2) + 2);
+//        Biome caveBiome = this.biomeProvider.getNoiseBiome((centerX << 2) + 2, 10, (centerZ << 2) + 2);
+//        SharedSeedRandom random = new SharedSeedRandom();
+//        long seed = random.setDecorationSeed(region.getSeed(), x, z);
+//
+//        try {
+//            surfaceBiome.generateFeatures(manager, (ChunkGenerator)(Object)this, region, seed, random, pos);
+//            FeatureGenerationHelper.generateOnlyFeatures(caveBiome, (ChunkGenerator)(Object)this, region, seed, random, pos);
+//        } catch (Exception exception) {
+//            CrashReport crashreport = CrashReport.makeCrashReport(exception, "Biome decoration");
+//            crashreport.makeCategory("Generation").addDetail("CenterX", centerX).addDetail("CenterZ", centerZ).addDetail("Seed", seed).addDetail("Surface Biome", surfaceBiome).addDetail("Cave Biome", caveBiome);
+//            throw new ReportedException(crashreport);
+//        }
+//    }
+
 
     /**
      * @author TelepathicGrunt

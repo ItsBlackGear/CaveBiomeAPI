@@ -6,7 +6,6 @@
   "refmap": "cavebiomeapi.refmap.json",
   "mixins": [
     "BiomeColorsMixin",
-    "BiomeManagerMixin",
     "ChunkGeneratorMixin",
     "ColumnFuzzedBiomeMagnifierMixin",
     "NetherBiomeProviderAccessor",
@@ -17,6 +16,7 @@
     "structure.WoodlandMansionMixin"
   ],
   "client": [
+    "BiomeManagerMixin"
   ],
   "injectors": {
     "defaultRequire": 1
