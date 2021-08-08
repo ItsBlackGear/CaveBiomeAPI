@@ -4,6 +4,7 @@ import com.blackgear.cavebiomes.core.utils.ChunkSectionUtils;
 import com.mojang.serialization.Codec;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.material.Material;
 import net.minecraft.util.SharedSeedRandom;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -163,11 +164,9 @@ public class NoiseCarver extends CaveWorldCarver {
                                 if (density < 0.0) {
                                     // TODO no new
                                     BlockState state = Blocks.CAVE_AIR.getDefaultState();
-                                    if (realY < 11) {
-                                        state = Blocks.LAVA.getDefaultState();
-                                    }
 
-                                    chunkIn.setBlockState(new BlockPos(localX, realY, localZ), state, false);
+                                    carveBlock(chunkIn, state, new BlockPos(localX, realY, localZ));
+                                    //chunkIn.setBlockState(new BlockPos(localX, realY, localZ), state, false);
 
                                     int i = localX | localZ << 4 | realY << 8;
                                     carvingMask.set(i);
@@ -185,6 +184,26 @@ public class NoiseCarver extends CaveWorldCarver {
         }
 
         return true;
+    }
+
+    private static void carveBlock(IChunk chunk, BlockState state, BlockPos pos) {
+
+        //Returns if there's water in their axis
+        if (chunk.getBlockState(pos).getMaterial() == Material.WATER
+            || chunk.getBlockState(pos.up()).getMaterial() == Material.WATER
+            || (pos.getX() < 15 && chunk.getBlockState(pos.east()).getMaterial() == Material.WATER)
+            || (pos.getX() > 0 && chunk.getBlockState(pos.west()).getMaterial() == Material.WATER)
+            || (pos.getZ() > 0 && chunk.getBlockState(pos.south()).getMaterial() == Material.WATER)
+            || (pos.getZ() < 15 && chunk.getBlockState(pos.north()).getMaterial() == Material.WATER)) {
+            return;
+        }
+
+        if (pos.getY() < 11) {
+            state = Blocks.LAVA.getDefaultState();
+        }
+        //Prevent Floating Lava
+        chunk.setBlockState(pos, state, false);
+        chunk.getFluidsToBeTicked().scheduleTick(pos, LAVA.getFluid(), 0);
     }
 
     public static void sampleNoiseColumn(double[] buffer, int x, int z, OctavesNoiseGenerator caveNoise, OctavesNoiseGenerator offsetNoise, OctavesNoiseGenerator scaleNoise) {
