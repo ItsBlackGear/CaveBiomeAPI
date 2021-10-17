@@ -61,3 +61,4 @@ Once you're happy with the results just add them into the method and remember to
     CaveBiomeAPI.addCaveBiome(Biomes.DRIPSTONE_CAVES, new Biome.Attributes(0.0F, 0.0F, 0.8F, 0.0F, 0.0F));
     CaveBiomeAPI.addCaveBiome(Biomes.LUSH_CAVES, new Biome.Attributes(0.0F, 0.7F, 0.0F, 0.0F, 0.0F));
 After injecting the cave biomes you can proceed to run the game and you'll find your cave biomes generating in the underground and ready to go.
+If by any chance you have any more further questions or you're having some difficulties while following these steps feel free to contact me in my [discord server](https://discord.gg/fTzK9SP), i'm very active and always glad to help
