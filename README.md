@@ -33,3 +33,21 @@ You'll need to tell Forge that the API is a hard-dependency for your mod, this m
 Replace `<modid>` with your mod's id of course. Set the `versionRange` to the version you chose on CurseForge.
 
 That's it! You should now have CaveBiomeAPI in your workspace and as a required dependency. Any issues you find should be reported to the [Issue Tracker](https://github.com/ItsBlackGear/CaveBiomeAPI/issues).
+
+## **💻 Using the API**
+We tried to make this API as simple as possible, so simple that you'll have your own cave biome in no time
+
+### **Creating a Cave Biome**
+Creating a cave biome is not really complicated, you follow the same steps that you do to create a default biome,
+you can use both the `Deferred Registries` or the `Vanilla Registry` methods, any of them will work with this API so you don't have to worry about them 
+
+We don't recommend using features that are used in the surface while creating a biome like using `DefaultBiomeFeatures.withDisks` because these features will generate in the surface in biomes where they don't belong, such as swamps.
+
+### **Injecting a Cave Biome**
+Injecting the cave biome is the easiest and most complicated part of this API, all you have to do is initialize it by using the following method:
+
+    CaveBiomeAPI.addCaveBiome(biome, new Biome.Attributes(temperature, humidity, altitude, weirdness, offset));
+If you are familiar with `MultiNoise` you'll catch this up pretty quickly, if not then don't worry, you'll learn how to use it in no time. 
+The `biome` parameter will call for the cave biome that you want to inject, we'll use `LUSH_CAVES` as an example.
+
+MultiNoise works with 4 different noise parameters which modify the biome distribution, i could explain it myself but one of the Devs of Minecraft actually made a video explaining how MultiNoise works and with graphic examples right [HERE](https://www.youtube.com/watch?v=VYZl2MUat-M).
