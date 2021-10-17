@@ -47,7 +47,17 @@ We don't recommend using features that are used in the surface while creating a 
 Injecting the cave biome is the easiest and most complicated part of this API, all you have to do is initialize it by using the following method:
 
     CaveBiomeAPI.addCaveBiome(biome, new Biome.Attributes(temperature, humidity, altitude, weirdness, offset));
-If you are familiar with `MultiNoise` you'll catch this up pretty quickly, if not then don't worry, you'll learn how to use it in no time. 
-The `biome` parameter will call for the cave biome that you want to inject, we'll use `LUSH_CAVES` as an example.
+*It won't be always `Biome.Attributes`, if you're using the official mappings they will be replaced by `Biome.ClimateParameters` or at least that's how i've seen it working in 1.17*
 
-MultiNoise works with 4 different noise parameters which modify the biome distribution, i could explain it myself but one of the Devs of Minecraft actually made a video explaining how MultiNoise works and with graphic examples right [HERE](https://www.youtube.com/watch?v=VYZl2MUat-M).
+If you are familiar with `MultiNoise` you'll catch this up pretty quickly, if not then don't worry, you'll learn how to use it in no time. 
+The `biome` parameter will call for the cave biome that you want to inject.
+
+MultiNoise works with 4 different noise parameters which modify the biome distribution, i could explain it myself but one of the Devs of Minecraft actually made a video explaining how MultiNoise works and with graphic examples right [here](https://www.youtube.com/watch?v=VYZl2MUat-M).
+
+As an extra feature, a cool person called Misode made a cool tool which will help you to preview biome generation and it does support MultiNoise you can find the tool [here](https://misode.github.io/dimension/) and i've made an [example json](https://github.com/ItsBlackGear/CaveBiomeAPI/blob/main/EXAMPLE.json) file that you can use to preview the cave biome generation using the 1.17 cave biomes, just paste it in the json holder of the website and mess with the values until you like it.
+
+Once you're happy with the results just add them into the method and remember to initialize it, here's an example using the vanilla caves:
+
+    CaveBiomeAPI.addCaveBiome(Biomes.DRIPSTONE_CAVES, new Biome.Attributes(0.0F, 0.0F, 0.8F, 0.0F, 0.0F));
+    CaveBiomeAPI.addCaveBiome(Biomes.LUSH_CAVES, new Biome.Attributes(0.0F, 0.7F, 0.0F, 0.0F, 0.0F));
+After injecting the cave biomes you can proceed to run the game and you'll find your cave biomes generating in the underground and ready to go.
