@@ -73,9 +73,9 @@ minecraft {
 dependencies {
     minecraft "net.minecraftforge:forge:${project.minecraft}-${project.forge}"
 
-    implementation fg.deobf("curse.maven:biomes-o-plenty-220318:3300293")
+    implementation fg.deobf("curse.maven:biomes-o-plenty-220318:3913914")
 
-    annotationProcessor 'org.spongepowered:mixin:0.8.2:processor'
+    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
 
 repositories{

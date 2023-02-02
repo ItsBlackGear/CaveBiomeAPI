@@ -20,7 +20,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(BiomeManager.class)
 public class BiomeManagerMixin {
-    @Redirect(method = "getBiomeAtPosition(III)Lnet/minecraft/world/biome/Biome;", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/biome/BiomeManager$IBiomeReader;getNoiseBiome(III)Lnet/minecraft/world/biome/Biome;"))
+    @Redirect(method = "getNoiseBiomeAtQuart(III)Lnet/minecraft/world/biome/Biome;", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/biome/BiomeManager$IBiomeReader;getNoiseBiome(III)Lnet/minecraft/world/biome/Biome;"))
     private Biome cba$getBiomeAtPosition(BiomeManager.IBiomeReader iBiomeReader, int x, int y, int z) {
         return iBiomeReader.getNoiseBiome(x, 64, z);
     }

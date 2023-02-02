@@ -39,24 +39,24 @@ public class NoiseCarver extends CaveWorldCarver {
     }
 
     @Override
-    protected boolean func_227208_a_(IChunk chunk, Function<BlockPos, Biome> biomePos, long seed, int seaLevel, int chunkX, int chunkZ, double randOffsetXCoord, double startY, double randOffsetZCoord, double p_227208_14_, double p_227208_16_, BitSet carvingMask) {
+    protected boolean carveSphere(IChunk chunk, Function<BlockPos, Biome> biomePos, long seed, int seaLevel, int chunkX, int chunkZ, double randOffsetXCoord, double startY, double randOffsetZCoord, double p_227208_14_, double p_227208_16_, BitSet carvingMask) {
         this.worldSeed = seed;
-        return super.func_227208_a_(chunk, biomePos, this.worldSeed, seaLevel, chunkX, chunkZ, randOffsetXCoord, startY, randOffsetZCoord, p_227208_14_, p_227208_16_, carvingMask);
+        return super.carveSphere(chunk, biomePos, this.worldSeed, seaLevel, chunkX, chunkZ, randOffsetXCoord, startY, randOffsetZCoord, p_227208_14_, p_227208_16_, carvingMask);
     }
 
     @Override
-    public boolean carveRegion(IChunk chunkIn, Function<BlockPos, Biome> biomePos, Random rand, int seaLevel, int chunkX, int chunkZ, int mainChunkX, int mainChunkZ, BitSet carvingMask, ProbabilityConfig config) {
+    public boolean carve(IChunk chunkIn, Function<BlockPos, Biome> biomePos, Random rand, int seaLevel, int chunkX, int chunkZ, int mainChunkX, int mainChunkZ, BitSet carvingMask, ProbabilityConfig config) {
         if (!(mainChunkX == chunkX && mainChunkZ == chunkZ)) {
             return false;
         }
 
-        Heightmap floor = chunkIn.getHeightmap(Heightmap.Type.OCEAN_FLOOR_WG);
+        Heightmap floor = chunkIn.getOrCreateHeightmapUnprimed(Heightmap.Type.OCEAN_FLOOR_WG);
 
         // Get all heights in this chunk for thresholding
         int[] heights = new int[256];
         for (int x = 0; x < 16; x++) {
             for (int z = 0; z < 16; z++) {
-                heights[(x * 16) + z] = floor.getHeight(x, z);
+                heights[(x * 16) + z] = floor.getFirstAvailable(x, z);
             }
         }
 
@@ -113,7 +113,7 @@ public class NoiseCarver extends CaveWorldCarver {
                         int realY = noiseY * 8 + pieceY;
                         int sectionY = realY >> 4;
 
-                        if (section.getYLocation() >> 4 != sectionY) {
+                        if (section.bottomBlockY() >> 4 != sectionY) {
 //                            section.unlock();
 
                             section = ChunkSectionUtils.getSection(chunkIn, sectionY);
@@ -163,7 +163,7 @@ public class NoiseCarver extends CaveWorldCarver {
 
                                 if (density < 0.0) {
                                     // TODO no new
-                                    BlockState state = Blocks.CAVE_AIR.getDefaultState();
+                                    BlockState state = Blocks.CAVE_AIR.defaultBlockState();
 
                                     carveBlock(chunkIn, state, new BlockPos(localX, realY, localZ));
                                     //chunkIn.setBlockState(new BlockPos(localX, realY, localZ), state, false);
@@ -190,7 +190,7 @@ public class NoiseCarver extends CaveWorldCarver {
 
         //Returns if there's water in their axis
         if (chunk.getBlockState(pos).getMaterial() == Material.WATER
-            || chunk.getBlockState(pos.up()).getMaterial() == Material.WATER
+            || chunk.getBlockState(pos.above()).getMaterial() == Material.WATER
             || (pos.getX() < 15 && chunk.getBlockState(pos.east()).getMaterial() == Material.WATER)
             || (pos.getX() > 0 && chunk.getBlockState(pos.west()).getMaterial() == Material.WATER)
             || (pos.getZ() > 0 && chunk.getBlockState(pos.south()).getMaterial() == Material.WATER)
@@ -199,15 +199,15 @@ public class NoiseCarver extends CaveWorldCarver {
         }
 
         if (pos.getY() < 11) {
-            state = Blocks.LAVA.getDefaultState();
+            state = Blocks.LAVA.defaultBlockState();
         }
         //Prevent Floating Lava
         chunk.setBlockState(pos, state, false);
-        chunk.getFluidsToBeTicked().scheduleTick(pos, LAVA.getFluid(), 0);
+        chunk.getLiquidTicks().scheduleTick(pos, LAVA.getType(), 0);
     }
 
     public static void sampleNoiseColumn(double[] buffer, int x, int z, OctavesNoiseGenerator caveNoise, OctavesNoiseGenerator offsetNoise, OctavesNoiseGenerator scaleNoise) {
-        double offset = offsetNoise.func_205563_a(x / 128.0, 5423.434, z / 128.0) * 5.45;
+        double offset = offsetNoise.getValue(x / 128.0, 5423.434, z / 128.0) * 5.45;
         Random random = new Random(((long) x << 1) * 341873128712L + ((long) z << 1) * 132897987541L);
 
         // generate pillar
@@ -226,16 +226,16 @@ public class NoiseCarver extends CaveWorldCarver {
         double amplitude = 1;
 
         for (int i = 0; i < 6; i++) {
-            ImprovedNoiseGenerator sampler = caveNoise.getOctave(i);
+            ImprovedNoiseGenerator sampler = caveNoise.getOctaveNoise(i);
 
-            noise += sampler.func_215456_a(x * 2.63 * amplitude, y * 12.18 * amplitude, z * 2.63 * amplitude, 0, 0) / amplitude;
+            noise += sampler.noise(x * 2.63 * amplitude, y * 12.18 * amplitude, z * 2.63 * amplitude, 0, 0) / amplitude;
 
             amplitude /= 2.0;
         }
 
         noise /= 1.25;
 
-        double scale = (scaleNoise.getOctave(0).func_215456_a(x / 96.0, y / 96.0, z / 96.0, 0, 0) + 0.2) * 30;
+        double scale = (scaleNoise.getOctaveNoise(0).noise(x / 96.0, y / 96.0, z / 96.0, 0, 0) + 0.2) * 30;
         noise += Math.min(scale, 0);
 
         return noise;
@@ -255,12 +255,12 @@ public class NoiseCarver extends CaveWorldCarver {
     }
 
     @Override
-    protected boolean func_222708_a(double scaledRelativeX, double scaledRelativeY, double scaledRelativeZ, int y) {
+    protected boolean skip(double scaledRelativeX, double scaledRelativeY, double scaledRelativeZ, int y) {
         return false;
     }
 
     @Override
-    public boolean shouldCarve(Random rand, int chunkX, int chunkZ, ProbabilityConfig config) {
+    public boolean isStartChunk(Random rand, int chunkX, int chunkZ, ProbabilityConfig config) {
         return rand.nextFloat() <= config.probability;
     }
 }

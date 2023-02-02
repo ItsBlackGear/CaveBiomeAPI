@@ -28,7 +28,7 @@ public class CaveOreFeature extends Feature<CaveOreFeatureConfig> {
     }
 
     @Override
-    public boolean generate(ISeedReader reader, ChunkGenerator generator, Random rand, BlockPos pos, CaveOreFeatureConfig config) {
+    public boolean place(ISeedReader reader, ChunkGenerator generator, Random rand, BlockPos pos, CaveOreFeatureConfig config) {
         float chance = rand.nextFloat() * (float)Math.PI;
         float size = config.size / 8.0F;
         int density = MathHelper.ceil((config.size / 16.0F * 2.0F + 1.0F) / 2.0F);
@@ -126,16 +126,16 @@ public class CaveOreFeature extends Feature<CaveOreFeatureConfig> {
                                 if (xSize * xSize + ySize * ySize < 1.0D) {
                                     for(int zArea = fromZ; zArea <= toZ; ++zArea) {
                                         double zSize = ((double)zArea + 0.5D - noise) / xArea;
-                                        if (xSize * xSize + ySize * ySize + zSize * zSize < 1.0D && !World.isYOutOfBounds(yArea)) {
+                                        if (xSize * xSize + ySize * ySize + zSize * zSize < 1.0D && !World.isOutsideBuildHeight(yArea)) {
                                             int totalSize = xArea - x + (yArea - y) * horizontalSize + (zArea - z) * horizontalSize * verticalSize;
                                             if (!radius.get(totalSize)) {
                                                 radius.set(totalSize);
-                                                mutable.setPos(xArea, yArea, zArea);
+                                                mutable.set(xArea, yArea, zArea);
                                                 ChunkSection chunkSection = sectionCache.getSection(mutable);
                                                 if (chunkSection != Chunk.EMPTY_SECTION) {
-                                                    int xIn = SectionPos.mask(xArea);
-                                                    int yIn = SectionPos.mask(yArea);
-                                                    int zIn = SectionPos.mask(zArea);
+                                                    int xIn = SectionPos.sectionRelative(xArea);
+                                                    int yIn = SectionPos.sectionRelative(yArea);
+                                                    int zIn = SectionPos.sectionRelative(zArea);
                                                     BlockState state = chunkSection.getBlockState(xIn, yIn, zIn);
 
                                                     for (CaveOreFeatureConfig.Target target : config.targets) {

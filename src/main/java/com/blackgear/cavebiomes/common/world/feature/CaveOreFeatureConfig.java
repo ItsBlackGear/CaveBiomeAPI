@@ -53,7 +53,7 @@ public class CaveOreFeatureConfig implements IFeatureConfig {
 
     public static class Target {
         public static final Codec<Target> CODEC = RecordCodecBuilder.create((instance) -> {
-            return instance.group(RuleTest.field_237127_c_.fieldOf("target").forGetter((target) -> {
+            return instance.group(RuleTest.CODEC.fieldOf("target").forGetter((target) -> {
                 return target.target;
             }), BlockState.CODEC.fieldOf("state").forGetter((target) -> {
                 return target.state;

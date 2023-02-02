@@ -11,7 +11,7 @@ import net.minecraft.world.gen.feature.ProbabilityConfig;
 //<>
 
 public class CaveConfiguredCarvers {
-    public static final ConfiguredCarver<ProbabilityConfig> NOISE_CARVER = registerConfiguredCarver("noise_carver", CaveCarvers.NOISE_CARVER.get().func_242761_a(new ProbabilityConfig(1F)));
+    public static final ConfiguredCarver<ProbabilityConfig> NOISE_CARVER = registerConfiguredCarver("noise_carver", CaveCarvers.NOISE_CARVER.get().configured(new ProbabilityConfig(1F)));
 
     public static <C extends ICarverConfig, CC extends ConfiguredCarver<C>> CC registerConfiguredCarver(String key, CC configuredFeature) {
         ResourceLocation ID = new ResourceLocation(CavesAPI.MOD_ID, key);

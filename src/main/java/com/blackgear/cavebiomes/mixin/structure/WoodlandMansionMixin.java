@@ -17,10 +17,10 @@ import java.util.Set;
  */
 @Mixin(WoodlandMansionStructure.class)
 public class WoodlandMansionMixin {
-    @Redirect(method = "func_230363_a_", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/biome/provider/BiomeProvider;getBiomes(IIII)Ljava/util/Set;"))
+    @Redirect(method = "isFeatureChunk(Lnet/minecraft/world/gen/ChunkGenerator;Lnet/minecraft/world/biome/provider/BiomeProvider;JLnet/minecraft/util/SharedSeedRandom;IILnet/minecraft/world/biome/Biome;Lnet/minecraft/util/math/ChunkPos;Lnet/minecraft/world/gen/feature/NoFeatureConfig;)Z", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/biome/provider/BiomeProvider;getBiomesWithin(IIII)Ljava/util/Set;"))
 //    @Redirect(method = "func_230363_a_(Lnet/minecraft/world/gen/ChunkGenerator;Lnet/minecraft/world/biome/provider/BiomeProvider;JLnet/minecraft/util/SharedSeedRandom;IILnet/minecraft/world/biome/Biome;Lnet/minecraft/util/math/ChunkPos;Lnet/minecraft/world/gen/feature/NoFeatureConfig;)Z", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/biome/provider/BiomeProvider;getBiomes(IIII)Ljava/util/Set;"))
     private Set<Biome> cba$getSurfaceBiomes(BiomeProvider biomeProvider, int xIn, int yIn, int zIn, int radius) {
-        Set<Biome> biomeSet = biomeProvider.getBiomes(xIn, yIn, zIn, radius);
+        Set<Biome> biomeSet = biomeProvider.getBiomesWithin(xIn, yIn, zIn, radius);
         biomeSet.removeIf(CaveLayer.CAVE_BIOME_LIST::contains);
         return biomeSet;
     }

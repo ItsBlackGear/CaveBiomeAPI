@@ -39,7 +39,7 @@ public class CaveBiomeAPI {
      * @see com.blackgear.cavebiomes.mixin.OverworldBiomeProviderMixin#getNoiseBiome(int, int, int)
      */
     public static Biome injectCaveBiomes(Biome surfaceBiomes, int x, int y, int z) {
-        boolean isOceanBiome = surfaceBiomes.getCategory().equals(Biome.Category.OCEAN);
+        boolean isOceanBiome = surfaceBiomes.getBiomeCategory().equals(Biome.Category.OCEAN);
         int height = isOceanBiome ? 7 : 12;
         if (y <= height) {
             return caveBiomeProvider.getNoiseBiome(x, 0, z);
@@ -68,7 +68,7 @@ public class CaveBiomeAPI {
             throw new NullPointerException("CaveBiomeAPI's addCaveBiome method must take a registered biome. Null or unregistered biomes will be rejected.");
         }
 
-        addCaveBiome(RegistryKey.getOrCreateKey(Registry.BIOME_KEY, biome.getRegistryName()), noise);
+        addCaveBiome(RegistryKey.create(Registry.BIOME_REGISTRY, biome.getRegistryName()), noise);
     }
 
     /**

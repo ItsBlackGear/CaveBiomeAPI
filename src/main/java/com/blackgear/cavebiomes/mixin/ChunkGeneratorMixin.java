@@ -27,23 +27,23 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
  */
 @Mixin(ChunkGenerator.class)
 public class ChunkGeneratorMixin {
-    @Shadow @Final protected BiomeProvider biomeProvider;
+    @Shadow @Final protected BiomeProvider biomeSource;
 
 //    @Redirect(method = "func_230351_a_", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/biome/provider/BiomeProvider;getNoiseBiome(III)Lnet/minecraft/world/biome/Biome;"))
-    @Redirect(method = "func_230351_a_(Lnet/minecraft/world/gen/WorldGenRegion;Lnet/minecraft/world/gen/feature/structure/StructureManager;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/biome/provider/BiomeProvider;getNoiseBiome(III)Lnet/minecraft/world/biome/Biome;"), remap = false)
+    @Redirect(method = "applyBiomeDecoration(Lnet/minecraft/world/gen/WorldGenRegion;Lnet/minecraft/world/gen/feature/structure/StructureManager;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/biome/provider/BiomeProvider;getNoiseBiome(III)Lnet/minecraft/world/biome/Biome;"), remap = false)
     private Biome cba$generateSurfaceFeatures(BiomeProvider provider, int x, int y, int z) {
         return provider.getNoiseBiome(x, 64, z);
     }
 
-    @Inject(method = "func_230351_a_", at = @At("RETURN"), cancellable = true)
+    @Inject(method = "applyBiomeDecoration(Lnet/minecraft/world/gen/WorldGenRegion;Lnet/minecraft/world/gen/feature/structure/StructureManager;)V", at = @At("RETURN"), cancellable = true)
 //    @Inject(method = "func_230351_a_(Lnet/minecraft/world/gen/WorldGenRegion;Lnet/minecraft/world/gen/feature/structure/StructureManager;)V", at = @At("RETURN"), cancellable = true)
     private void cba$generateUndergroundFeatures(WorldGenRegion region, StructureManager manager, CallbackInfo ci) {
-        int mainChunkX = region.getMainChunkX();
-        int mainChunkZ = region.getMainChunkZ();
+        int mainChunkX = region.getCenterX();
+        int mainChunkZ = region.getCenterZ();
         int x = mainChunkX * 16;
         int z = mainChunkZ * 16;
         BlockPos pos = new BlockPos(x, 0, z);
-        Biome biome = this.biomeProvider.getNoiseBiome((mainChunkX << 2) + 2, 10, (mainChunkZ << 2) + 2);
+        Biome biome = this.biomeSource.getNoiseBiome((mainChunkX << 2) + 2, 10, (mainChunkZ << 2) + 2);
         if(!CaveLayer.CAVE_BIOME_LIST.contains(biome)) return;
 
         SharedSeedRandom seedRandom = new SharedSeedRandom();
@@ -52,8 +52,8 @@ public class ChunkGeneratorMixin {
         try {
             FeatureGenerationHelper.generateOnlyFeatures(biome, (ChunkGenerator)(Object)this, region, seed, seedRandom, pos);
         } catch (Exception exception) {
-            CrashReport report = CrashReport.makeCrashReport(exception, "Biome decoration");
-            report.makeCategory("Generation").addDetail("CenterX", mainChunkX).addDetail("CenterZ", mainChunkZ).addDetail("Seed", seed).addDetail("Biome", biome);
+            CrashReport report = CrashReport.forThrowable(exception, "Biome decoration");
+            report.addCategory("Generation").setDetail("CenterX", mainChunkX).setDetail("CenterZ", mainChunkZ).setDetail("Seed", seed).setDetail("Biome", biome);
             throw new ReportedException(report);
         }
     }
@@ -88,13 +88,13 @@ public class ChunkGeneratorMixin {
     /**
      * @author TelepathicGrunt
      */
-    @Redirect(method = "func_242707_a", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/biome/provider/BiomeProvider;getNoiseBiome(III)Lnet/minecraft/world/biome/Biome;"))
+    @Redirect(method = "createStructures(Lnet/minecraft/util/registry/DynamicRegistries;Lnet/minecraft/world/gen/feature/structure/StructureManager;Lnet/minecraft/world/chunk/IChunk;Lnet/minecraft/world/gen/feature/template/TemplateManager;J)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/biome/provider/BiomeProvider;getNoiseBiome(III)Lnet/minecraft/world/biome/Biome;"))
 //    @Redirect(method = "func_242707_a(Lnet/minecraft/util/registry/DynamicRegistries;Lnet/minecraft/world/gen/feature/structure/StructureManager;Lnet/minecraft/world/chunk/IChunk;Lnet/minecraft/world/gen/feature/template/TemplateManager;J)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/biome/provider/BiomeProvider;getNoiseBiome(III)Lnet/minecraft/world/biome/Biome;"))
     private Biome cba$setStructureStarts(BiomeProvider biomeProvider, int x, int y, int z) {
         return biomeProvider.getNoiseBiome(x, 64, z);
     }
 
-    @Redirect(method = "func_230350_a_", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/biome/provider/BiomeProvider;getNoiseBiome(III)Lnet/minecraft/world/biome/Biome;"))
+    @Redirect(method = "applyCarvers(JLnet/minecraft/world/biome/BiomeManager;Lnet/minecraft/world/chunk/IChunk;Lnet/minecraft/world/gen/GenerationStage$Carving;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/biome/provider/BiomeProvider;getNoiseBiome(III)Lnet/minecraft/world/biome/Biome;"))
 //    @Redirect(method = "func_230350_a_(JLnet/minecraft/world/biome/BiomeManager;Lnet/minecraft/world/chunk/IChunk;Lnet/minecraft/world/gen/GenerationStage$Carving;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/biome/provider/BiomeProvider;getNoiseBiome(III)Lnet/minecraft/world/biome/Biome;"))
     private Biome cba$generateSurfaceCarvers(BiomeProvider provider, int x, int y, int z) {
         return provider.getNoiseBiome(x, 64, z);

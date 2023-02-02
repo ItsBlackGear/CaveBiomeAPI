@@ -32,7 +32,7 @@ public class BOPBiomeProviderMixin {
      */
     @Overwrite
     public Biome getNoiseBiome(int xIn, int yIn, int zIn) {
-        Biome surfaceBiome = this.noiseBiomeLayer.func_242936_a(this.biomes, xIn, zIn);
+        Biome surfaceBiome = this.noiseBiomeLayer.get(this.biomes, xIn, zIn);
         return CaveBiomeAPI.injectCaveBiomes(surfaceBiome, xIn, yIn, zIn);
     }
 }
