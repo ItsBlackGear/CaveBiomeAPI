@@ -26,7 +26,7 @@ import java.util.function.Supplier;
  */
 @Mixin(NoiseChunkGenerator.class)
 public abstract class NoiseChunkGeneratorMixin extends ChunkGenerator {
-    @Shadow @Final protected Supplier<DimensionSettings> field_236080_h_;
+    @Shadow @Final protected Supplier<DimensionSettings> settings;
 
     public NoiseChunkGeneratorMixin(BiomeProvider p_i231888_1_, DimensionStructuresSettings p_i231888_2_) {
         super(p_i231888_1_, p_i231888_2_);
@@ -37,15 +37,15 @@ public abstract class NoiseChunkGeneratorMixin extends ChunkGenerator {
 //        return new BlockPos(pos.getX(), 64, pos.getZ());
 //    }
 
-    @Inject(method = "func_230354_a_(Lnet/minecraft/world/gen/WorldGenRegion;)V", at = @At("HEAD"))
+    @Inject(method = "spawnOriginalMobs(Lnet/minecraft/world/gen/WorldGenRegion;)V", at = @At("HEAD"))
     public void cba$populateSurfaceEntities(WorldGenRegion region, CallbackInfo ci) {
-        if (!this.field_236080_h_.get().func_236120_h_()) {
-            int x = region.getMainChunkX();
-            int z = region.getMainChunkZ();
+        if (!this.settings.get().disableMobGeneration()) {
+            int x = region.getCenterX();
+            int z = region.getCenterZ();
             Biome biome = region.getBiome(new BlockPos(x, 64, z));
             SharedSeedRandom sharedseedrandom = new SharedSeedRandom();
             sharedseedrandom.setDecorationSeed(region.getSeed(), x << 4, z << 4);
-            WorldEntitySpawner.performWorldGenSpawning(region, biome, x, z, sharedseedrandom);
+            WorldEntitySpawner.spawnMobsForChunkGeneration(region, biome, x, z, sharedseedrandom);
         }
     }
 }

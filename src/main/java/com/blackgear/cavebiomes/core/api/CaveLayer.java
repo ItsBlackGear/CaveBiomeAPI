@@ -29,8 +29,8 @@ public class CaveLayer {
     public static final List<Biome> CAVE_BIOME_LIST = new ArrayList<>();
 
     public static NetherBiomeProvider create(Registry<Biome> biomes, long seed) {
-        CAVE_BIOME_LIST.addAll(CAVE_BIOMES.keySet().stream().map(biomes::getValueForKey).collect(Collectors.toList()));
-        return CENTER_BIOME_PROVIDER.build(biomes, seed);
+        CAVE_BIOME_LIST.addAll(CAVE_BIOMES.keySet().stream().map(biomes::get).collect(Collectors.toList()));
+        return CENTER_BIOME_PROVIDER.biomeSource(biomes, seed);
     }
 
     public static void addCaveBiome(RegistryKey<Biome> biome, Biome.Attributes noise) {

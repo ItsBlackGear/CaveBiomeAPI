@@ -25,7 +25,7 @@ public class FeatureGenerationHelper {
      * Will not spawn any structure and instead, only features.
      */
     public static void generateOnlyFeatures(Biome biome, ChunkGenerator chunkGenerator, WorldGenRegion worldGenRegion, long seed, SharedSeedRandom rand, BlockPos pos) {
-        List<List<Supplier<ConfiguredFeature<?, ?>>>> list = biome.getGenerationSettings().getFeatures();
+        List<List<Supplier<ConfiguredFeature<?, ?>>>> list = biome.getGenerationSettings().features();
         for (int generationStageIndex = 0; generationStageIndex < GenerationStage.Decoration.values().length; ++generationStageIndex) {
             int featureIndex = 1001; // offset index by 1001 so decorators for features do not exactly line up with features on surface biomes.
             if (list.size() > generationStageIndex) {
@@ -34,14 +34,14 @@ public class FeatureGenerationHelper {
                     rand.setFeatureSeed(seed, featureIndex, generationStageIndex);
 
                     try {
-                        configuredFeature.generate(worldGenRegion, chunkGenerator, rand, pos);
+                        configuredFeature.place(worldGenRegion, chunkGenerator, rand, pos);
                     }
                     catch (Exception exception) {
-                        CrashReport crashReport = CrashReport.makeCrashReport(exception, "Feature placement");
-                        crashReport.makeCategory("Feature")
-                                .addDetail("Id", Registry.FEATURE.getKey(configuredFeature.feature))
-                                .addDetail("Config", configuredFeature.config)
-                                .addDetail("Description", configuredFeature.feature.toString());
+                        CrashReport crashReport = CrashReport.forThrowable(exception, "Feature placement");
+                        crashReport.addCategory("Feature")
+                                .setDetail("Id", Registry.FEATURE.getKey(configuredFeature.feature))
+                                .setDetail("Config", configuredFeature.config)
+                                .setDetail("Description", configuredFeature.feature.toString());
                         throw new ReportedException(crashReport);
                     }
 

@@ -16,28 +16,28 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(BiomeColors.class)
 public abstract class BiomeColorsMixin {
-    @Shadow @Final public static ColorResolver GRASS_COLOR;
-    @Shadow @Final public static ColorResolver FOLIAGE_COLOR;
-    @Shadow @Final public static ColorResolver WATER_COLOR;
+    @Shadow @Final public static ColorResolver GRASS_COLOR_RESOLVER;
+    @Shadow @Final public static ColorResolver FOLIAGE_COLOR_RESOLVER;
+    @Shadow @Final public static ColorResolver WATER_COLOR_RESOLVER;
 
     @Shadow
-    private static int getBlockColor(IBlockDisplayReader worldIn, BlockPos blockPosIn, ColorResolver colorResolverIn) {
-        return worldIn.getBlockColor(blockPosIn, colorResolverIn);
+    private static int getAverageColor(IBlockDisplayReader worldIn, BlockPos blockPosIn, ColorResolver colorResolverIn) {
+        return worldIn.getBlockTint(blockPosIn, colorResolverIn);
     }
 
-    @Inject(method = "getGrassColor", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "getAverageGrassColor", at = @At("HEAD"), cancellable = true)
     private static void getGrassColor(IBlockDisplayReader worldIn, BlockPos pos, CallbackInfoReturnable<Integer> cir) {
-        cir.setReturnValue(getBlockColor(worldIn, withY(pos, 64), GRASS_COLOR));
+        cir.setReturnValue(getAverageColor(worldIn, withY(pos, 64), GRASS_COLOR_RESOLVER));
     }
 
-    @Inject(method = "getFoliageColor", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "getAverageFoliageColor", at = @At("HEAD"), cancellable = true)
     private static void getFoliageColor(IBlockDisplayReader worldIn, BlockPos pos, CallbackInfoReturnable<Integer> cir) {
-        cir.setReturnValue(getBlockColor(worldIn, withY(pos, 64), FOLIAGE_COLOR));
+        cir.setReturnValue(getAverageColor(worldIn, withY(pos, 64), FOLIAGE_COLOR_RESOLVER));
     }
 
-    @Inject(method = "getWaterColor", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "getAverageWaterColor", at = @At("HEAD"), cancellable = true)
     private static void getWaterColor(IBlockDisplayReader worldIn, BlockPos pos, CallbackInfoReturnable<Integer> cir) {
-        cir.setReturnValue(getBlockColor(worldIn, withY(pos, 64), WATER_COLOR));
+        cir.setReturnValue(getAverageColor(worldIn, withY(pos, 64), WATER_COLOR_RESOLVER));
     }
 
     @Unique

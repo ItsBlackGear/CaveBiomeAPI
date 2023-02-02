@@ -16,7 +16,7 @@ public class FeatureUtils {
         Direction[] directions = Direction.values();
 
         for (Direction direction : directions) {
-            mutable.setAndMove(pos, direction);
+            mutable.setWithOffset(pos, direction);
             if (predicate.test(posToState.apply(mutable))) {
                 return true;
             }

@@ -10,7 +10,7 @@ import net.minecraft.world.chunk.IChunk;
 
 public class ChunkSectionUtils {
     public static long sectionToLong(BlockPos pos) {
-        return SectionPos.asLong(SectionPos.toChunk(pos.getX()), SectionPos.toChunk(pos.getY()), SectionPos.toChunk(pos.getZ()));
+        return SectionPos.asLong(SectionPos.blockToSectionCoord(pos.getX()), SectionPos.blockToSectionCoord(pos.getY()), SectionPos.blockToSectionCoord(pos.getZ()));
     }
 
     public static ChunkSection getSection(IChunk chunk, int yIndex) {

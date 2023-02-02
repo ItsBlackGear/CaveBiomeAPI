@@ -17,8 +17,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(OverworldBiomeProvider.class)
 public class OverworldBiomeProviderMixin {
-    @Shadow @Final private Layer genBiomes;
-    @Shadow @Final private Registry<Biome> lookupRegistry;
+    @Shadow @Final private Layer noiseBiomeLayer;
+    @Shadow @Final private Registry<Biome> biomes;
 
     @Inject(method = "<init>", at = @At("RETURN"))
     public void cba$initialize(long seed, boolean legacyBiomeInitLayer, boolean largeBiomes, Registry<Biome> biomeRegistry, CallbackInfo ci) {
@@ -31,7 +31,7 @@ public class OverworldBiomeProviderMixin {
      */
     @Overwrite
     public Biome getNoiseBiome(int xIn, int yIn, int zIn) {
-        Biome surfaceBiome = this.genBiomes.func_242936_a(this.lookupRegistry, xIn, zIn);
+        Biome surfaceBiome = this.noiseBiomeLayer.get(this.biomes, xIn, zIn);
         return CaveBiomeAPI.injectCaveBiomes(surfaceBiome, xIn, yIn, zIn);
     }
 }

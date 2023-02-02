@@ -34,9 +34,9 @@ public class ChunkSectionCache implements AutoCloseable {
             long sectionPos = ChunkSectionUtils.sectionToLong(pos);
             if (this.cachedSection == null || this.sectionPos != sectionPos) {
                 this.cachedSection = this.cache.computeIfAbsent(sectionPos, (cache) -> {
-                    IChunk chunk = this.world.getChunk(SectionPos.toChunk(pos.getX()), SectionPos.toChunk(pos.getZ()));
+                    IChunk chunk = this.world.getChunk(SectionPos.blockToSectionCoord(pos.getX()), SectionPos.blockToSectionCoord(pos.getZ()));
                     ChunkSection section = ChunkSectionUtils.getSection(chunk, index);
-                    section.lock();
+                    section.acquire();
                     return section;
                 });
                 this.sectionPos = sectionPos;
@@ -51,11 +51,11 @@ public class ChunkSectionCache implements AutoCloseable {
     public BlockState getBlockState(BlockPos pos) {
         ChunkSection section = this.getSection(pos);
         if (section == Chunk.EMPTY_SECTION) {
-            return Blocks.AIR.getDefaultState();
+            return Blocks.AIR.defaultBlockState();
         } else {
-            int x = SectionPos.mask(pos.getX());
-            int y = SectionPos.mask(pos.getY());
-            int z = SectionPos.mask(pos.getZ());
+            int x = SectionPos.sectionRelative(pos.getX());
+            int y = SectionPos.sectionRelative(pos.getY());
+            int z = SectionPos.sectionRelative(pos.getZ());
             return section.getBlockState(x, y, z);
         }
     }
@@ -63,7 +63,7 @@ public class ChunkSectionCache implements AutoCloseable {
     @Override
     public void close() {
         for (ChunkSection section : this.cache.values()) {
-            section.unlock();
+            section.release();
         }
     }
 }
